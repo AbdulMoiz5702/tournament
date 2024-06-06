@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "505996336853",
+    "project_id": "tournament-45ad2",
+    "storage_bucket": "tournament-45ad2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505996336853:android:f9140c182358374f4f4c5c",
+        "android_client_info": {
+          "package_name": "com.tournmentApp.tournemnt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSD417dbkSsbyQ8FCJ52T1aIZtEP9OA6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
