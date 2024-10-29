@@ -1,30 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tournemnt/consts/colors.dart';
-import 'package:tournemnt/reusbale_widget/customLeading.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import 'package:tournemnt/reusbale_widget/toast_class.dart';
-import 'package:tournemnt/reusbale_widget/tournment-card.dart';
-
 import '../consts/images_path.dart';
+import '../controllers/auth_controller.dart';
 
 
-class ForgotScreen extends StatefulWidget {
-  const ForgotScreen({super.key});
-
-  @override
-  State<ForgotScreen> createState() => _ForgotScreenState();
-}
-
-class _ForgotScreenState extends State<ForgotScreen> {
-  TextEditingController emailController = TextEditingController();
-  final key = GlobalKey<FormState>();
-
+class ForgotScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var authController = Get.put(AuthController());
+    final key = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -55,13 +46,13 @@ class _ForgotScreenState extends State<ForgotScreen> {
                 validate: (value){
                   return value.isEmpty ? 'Enter Email': null ;
                 },
-                controller: emailController, hintText: 'Conformation Email',title:'Email'),
+                controller: authController.emailController, hintText: 'Conformation Email',title:'Email'),
               Sized(height:0.05,),
               CustomButton(title: 'Reset Password', onTap: () async{
                 if(key.currentState!.validate()){
                   try{
-                    FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.toString()).then((value){
-                      ToastClass.showToastClass(context: context, message: " Password email has send to the ${emailController.text.toString()}");
+                    FirebaseAuth.instance.sendPasswordResetEmail(email: authController.emailController.text.toString()).then((value){
+                      ToastClass.showToastClass(context: context, message: " Password email has been sent");
                     });
                   }catch(e){
                     ToastClass.showToastClass(context: context, message: "Something went wrong Error : $e");

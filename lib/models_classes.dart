@@ -53,41 +53,4 @@ class Team {
     required this.roundsQualify,
   });
 }
-class UserModel {
-  final String userId;
-  final String name;
-  final String email;
-  final String phoneNumber;
-  final String myRole;
-  final String location;
 
-  UserModel({
-    required this.userId,
-    required this.name,
-    required this.email,
-    required this.phoneNumber,
-    required this.myRole,
-    required this.location,
-  });
-
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      userId: map['userId'],
-      name: map['name'],
-      email: map['email'],
-      phoneNumber: map['phoneNumber'],
-      myRole: map['myRole'],
-      location:  map['location'],
-    );
-  }
-  Map<String, dynamic> toMap() {
-    return {
-      'userId': userId,
-      'name': name,
-      'email': email,
-      'phoneNumber': phoneNumber,
-      'myRole': myRole,
-      'location':location,
-    };
-  }
-}

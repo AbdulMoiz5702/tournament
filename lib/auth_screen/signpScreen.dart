@@ -1,46 +1,22 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tournemnt/BottomScreen.dart';
+import 'package:get/get.dart';
 import 'package:tournemnt/auth_screen/login_Screen.dart';
 import 'package:tournemnt/consts/colors.dart';
-import 'package:tournemnt/consts/images_path.dart';
+import 'package:tournemnt/controllers/auth_controller.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import 'package:tournemnt/reusbale_widget/toast_class.dart';
-import 'package:tournemnt/models_classes.dart';
 
-class SignupScreen extends StatefulWidget {
-  @override
-  State<SignupScreen> createState() => _SignupScreenState();
-}
 
-class _SignupScreenState extends State<SignupScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController location = TextEditingController();
-  final TextEditingController confirmPassword = TextEditingController();
-  String? myRole;
-  bool isLoading = false;
-
-  final key = GlobalKey<FormState>();
-
-  List<String> roles = [
-    'Bowler',
-    'Batsman',
-    'Opener',
-    'Fast Bowler',
-    'Hitter',
-  ];
-
+class SignupScreen extends StatelessWidget {
+  var authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
+    final key = GlobalKey<FormState>();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -72,7 +48,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   validate: (value){
                     return value.isEmpty ? 'Enter UserName': null ;
                   },
-                  controller: nameController,
+                  controller: authController.nameController,
                   hintText: 'Username',
                   title: 'Username',
                 ),
@@ -83,7 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   validate: (value){
                     return value.isEmpty ? 'Enter Phone No': null ;
                   },
-                  controller: phoneController,
+                  controller:  authController.phoneController,
                   hintText: 'Phone',
                   keyboardType: TextInputType.number,
                   title:  'Phone'
@@ -95,7 +71,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   validate: (value){
                     return value.isEmpty ? 'Enter Address': null ;
                   },
-                  controller: location,
+                  controller:  authController.location,
                   hintText: 'Address',
                   title:'Address',
                 ),
@@ -104,7 +80,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   validate: (value){
                     return value.isEmpty ? 'Enter Email': null ;
                   },
-                  controller: emailController,
+                  controller:  authController.emailController,
                   hintText: 'Email',
                   title: 'Email',
                 ),
@@ -115,7 +91,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   validate: (value){
                     return value.isEmpty ? 'Enter Password': null ;
                   },
-                  controller: passwordController,
+                  controller:  authController.passwordController,
                   hintText: 'Password',
                   title: 'Password',
                 ),
@@ -126,7 +102,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   validate: (value){
                     return value.isEmpty ? 'Retype Password': null ;
                   },
-                  controller: confirmPassword,
+                  controller: authController.confirmPassword,
                   hintText: 'Confirm Password',
                   title: 'Confirm Password',
                 ),
@@ -138,29 +114,27 @@ class _SignupScreenState extends State<SignupScreen> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: List.generate(roles.length, (index) {
+                children: List.generate( authController.roles.length, (index) {
                   return InkWell(
                     borderRadius: BorderRadius.circular(10),
                     onTap: () {
-                      setState(() {
-                        myRole = roles[index];
-                      });
+                        authController.myRole.value =  authController.roles[index];
                     },
                     child: Container(
                       margin: const EdgeInsets.only(left: 5),
                       child: Chip(
                         autofocus: true,
-                        backgroundColor: myRole == roles[index]
+                        backgroundColor:  authController.myRole.value ==  authController.roles[index]
                             ? blueColor// Highlight selected role
                             : secondaryWhiteColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
                         label: smallText(
-                          title: roles[index],
+                          title:  authController.roles[index],
                           context: context,
                           fontSize: 10,
-                          color:myRole == roles[index] ?  whiteColor : secondaryTextColor
+                          color: authController.myRole.value ==  authController.roles[index] ?  whiteColor : secondaryTextColor
                         ),
                       ),
                     ),
@@ -171,13 +145,13 @@ class _SignupScreenState extends State<SignupScreen> {
                 Sized(
                   height: 0.03,
                 ),
-              isLoading == true ?const  Center(child: CircularProgressIndicator(color: blueColor,),):  CustomButton(
+                Obx(() => authController.isLoading.value == true ?const  Center(child: CircularProgressIndicator(color: blueColor,),):  CustomButton(
                     title: 'Create Account',
                     onTap: () {
                       if(key.currentState!.validate() ){
-                        if(confirmPassword.text.toString() == passwordController.text.toString()){
-                          if(myRole!.isNotEmpty){
-                            signInWithEmailPassword(context);
+                        if( authController.confirmPassword.text.toString() ==  authController.passwordController.text.toString()){
+                          if( authController.myRole.isNotEmpty){
+                            authController.createAccount(context);
                           }else{
                             ToastClass.showToastClass(context: context, message: 'Please Select Role in your team');
                           }
@@ -187,7 +161,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       }else{
                         ToastClass.showToastClass(context: context, message: 'Please Fill all the Fields');
                       }
-                    }),
+                    }),),
                 Sized(
                   height: 0.03,
                 ),
@@ -201,10 +175,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => LoginPage()));
+                          Get.to(()=> LoginPage());
                         },
                         child: smallText(
                             title: 'Login', fontSize: 16, context: context,color: blueColor)),
@@ -218,41 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  void signInWithEmailPassword(BuildContext context) async {
-    try {
-      isLoading = true;
-      setState(() {});
-      final String email = emailController.text.toString();
-      final String password = passwordController.text.toString();
-      final UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      isLoading = false;
-      setState(() {});
-      final User? user = userCredential.user;
-      if (user != null) {
-        final newUser = UserModel(
-          userId: user.uid,
-          name: nameController.text.toString(),
-          email: emailController.text.toString(),
-          phoneNumber: phoneController.text.toString(),
-          myRole: myRole.toString(),
-          location: location.text.toString(),
-        );
-        await FirebaseFirestore.instance.collection('Users').doc(user.uid).set(newUser.toMap());
-        Navigator.pushReplacement(
-          context,
-          CupertinoPageRoute(
-            builder: (context) => BottomScreen(userId: newUser.userId),
-          ),
-        );
-        throw ToastClass.showToastClass(context: context, message: 'Signup Successfully');
-      }
-    } catch (error) {
-      isLoading = false;
-      setState(() {});
-      throw ToastClass.showToastClass(context: context, message: 'Failed to signup : Error $error');
-    }
-  }
+
 }
+
+

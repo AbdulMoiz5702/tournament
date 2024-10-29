@@ -1,9 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tournemnt/BottomScreen.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:tournemnt/auth_screen/forgot_password-screen.dart';
 import 'package:tournemnt/auth_screen/signpScreen.dart';
 import 'package:tournemnt/consts/images_path.dart';
@@ -13,21 +12,13 @@ import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 
 import '../consts/colors.dart';
+import '../controllers/auth_controller.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false;
-
-  final  key = GlobalKey<FormState>();
-
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var authController = Get.put(AuthController());
+    final  key = GlobalKey<FormState>();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -59,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                   validate: (value) {
                     return value.isEmpty ? 'Enter Email': null ;
                   },
-                  controller: emailController,
+                  controller: authController.emailController,
                   hintText: 'Email',
                   title: 'Email',
                 ),
@@ -70,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                   validate: (value) {
                     return value.isEmpty ? 'Enter password': null ;
                   },
-                  controller: passwordController,
+                  controller: authController.passwordController,
                   hintText: 'Password',
                   title: 'Password',
                 ),
@@ -84,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => const ForgotScreen()));
+                                  builder: (context) => ForgotScreen()));
                         },
                         child: smallText(
                             title: 'Forgot Password ?',
@@ -94,14 +85,13 @@ class _LoginPageState extends State<LoginPage> {
                 Sized(
                   height: 0.03,
                 ),
-               isLoading == true ? const Center(child: CircularProgressIndicator(color: blueColor,),) : CustomButton(
+                Obx(() =>authController.isLoading.value == true ? const Center(child: CircularProgressIndicator(color: blueColor,),) : CustomButton(
                     title: 'Login',
                     onTap: () {
                       if(key.currentState!.validate()){
-                        signInWithEmailPassword(context);
-                        setState(() {});
+                        authController.signInWithEmailPassword(context);
                       }
-                    }),
+                    }),),
                 Sized(
                   height: 0.2,
                 ),
@@ -114,10 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => SignupScreen()));
+                         Get.to(()=> SignupScreen());
                         },
                         child: smallText(
                             title: 'Create an account', fontSize: 16, context: context,color: blueColor)),
@@ -129,42 +116,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  void signInWithEmailPassword(BuildContext context) async {
-    try {
-      isLoading = true;
-      setState(() {});
-      final String email = emailController.text.toString();
-      final String password = passwordController.text.toString();
-      final UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      ).timeout(const Duration(seconds: 5),onTimeout: (){
-        isLoading = false;
-            setState(() {});
-          throw  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Request time out')),);
-          });
-      isLoading = false;
-      setState(() {});
-      final User? user = userCredential.user;
-      if (user != null) {
-        isLoading = false;
-        setState(() {});
-        // Navigate to the main page after successful login
-        Navigator.pushReplacement(
-          context,
-          CupertinoPageRoute(
-            builder: (context) => BottomScreen(
-              userId: user.uid.toString(),
-            ),
-          ),
-        );
-      }
-    } catch (error) {
-      isLoading = false;
-      setState(() {});
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error signing in with email and password')),);
-    }
   }
 }

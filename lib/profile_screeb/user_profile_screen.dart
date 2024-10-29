@@ -188,7 +188,7 @@ class ProfileScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => const ForgotScreen()));
+                                  builder: (context) =>  ForgotScreen()));
                           break;
                         case 6:
                           FirebaseAuth.instance.signOut().then((value) {
