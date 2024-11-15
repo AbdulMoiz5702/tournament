@@ -7,11 +7,12 @@ import 'package:tournemnt/consts/colors.dart';
 import 'package:tournemnt/consts/images_path.dart';
 import 'package:tournemnt/my_tournments/my_tournaments_teams/mymatches.dart';
 import 'package:tournemnt/profile_screeb/update_user_profile.dart';
-import 'package:tournemnt/reusbale_widget/custom_button.dart';
+import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import 'package:tournemnt/reusbale_widget/toast_class.dart';
 import '../auth_screen/forgot_password-screen.dart';
+import '../consts/firebase_consts.dart';
 import '../my_1v1_challenges/myChallenges.dart';
 import '../my_1v1_challenges/user_challnegs.dart';
 import '../my_tournments/my_tournaments_screen/myTournamnets.dart';
@@ -22,12 +23,11 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance.collection('Users').doc(userId).get(),
+      future: fireStore.collection(usersCollection).doc(userId).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-              child:
-                  CircularProgressIndicator()); // Show loading indicator while data is being fetched
+              child:CustomIndicator());
         }
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -132,107 +132,109 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ],
               )),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: List.generate(
-                    imageNames.length, (index){
-                  return GestureDetector(
-                    onTap: (){
-                      switch(index){
-                        case 0:
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => UpdateProfileScreen(
-                                  userId: userId,
-                                  userName: userData['name'],
-                                  email: userData['email'],
-                                  phone: userData['phoneNumber'],
-                                  location: userData['location'],
-                                  myRole: userData['myRole'],
-                                  imageLink: userData['imageLink'],
-                                )));
-                          break;
-                        case 1:
-                          Navigator.push(
+          body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                Column(
+                  children: List.generate(
+                      imageNames.length, (index){
+                    return GestureDetector(
+                      onTap: (){
+                        switch(index){
+                          case 0:
+                            Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) =>
-                                      MyTournamentsScreen(userId: userId)));
-                          break;
-                        case 2:
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) =>
-                                      MyTournamentsTeams(userId: userId)));
-                          break;
-                        case 3:
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => UserChallengesScreen(
+                                  builder: (context) => UpdateProfileScreen(
                                     userId: userId,
+                                    userName: userData['name'],
+                                    email: userData['email'],
+                                    phone: userData['phoneNumber'],
+                                    location: userData['location'],
+                                    myRole: userData['myRole'],
+                                    imageLink: userData['imageLink'],
                                   )));
-                          break;
-                        case 4:
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) =>
-                                      UserAcceptedChallengesScreen(userId: userId)));
-                          break;
-                        case 5:
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) =>  ForgotScreen()));
-                          break;
-                        case 6:
-                          FirebaseAuth.instance.signOut().then((value) {
-                            Navigator.pushReplacement(
+                            break;
+                          case 1:
+                            Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => LoginPage()));
-                            ToastClass.showToastClass(
-                                context: context, message: 'Logout Successfully');
-                          });
-                          break;
-                        default:
-                          break;
+                                    builder: (context) =>
+                                        MyTournamentsScreen(userId: userId)));
+                            break;
+                          case 2:
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        MyTournamentsTeams(userId: userId)));
+                            break;
+                          case 3:
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => UserChallengesScreen(
+                                      userId: userId,
+                                    )));
+                            break;
+                          case 4:
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        UserAcceptedChallengesScreen(userId: userId)));
+                            break;
+                          case 5:
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>  ForgotScreen()));
+                            break;
+                          case 6:
+                            FirebaseAuth.instance.signOut().then((value) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => LoginPage()));
+                              ToastClass.showToastClass(
+                                  context: context, message: 'Logout Successfully');
+                            });
+                            break;
+                          default:
+                            break;
 
-                      }
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      color: whiteColor,
-                      child:Container(
-                        padding: EdgeInsets.all(5),
+                        }
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         color: whiteColor,
-                        height: MediaQuery.sizeOf(context).height * 0.06,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset(imagesList[index]),
-                                Sized(width: 0.05,),
-                                smallText(title:imageNames[index],context: context,color: isTrue[index] == true ?  redColor : secondaryTextColor,),
-                              ],
-                            ),
-                           const  Icon(Icons.arrow_forward_ios,color: secondaryTextFieldColor,size: 15,),
-                          ],
+                        child:Container(
+                          padding: EdgeInsets.all(5),
+                          color: whiteColor,
+                          height: MediaQuery.sizeOf(context).height * 0.06,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset(imagesList[index]),
+                                  Sized(width: 0.05,),
+                                  smallText(title:imageNames[index],context: context,color: isTrue[index] == true ?  redColor : secondaryTextColor,),
+                                ],
+                              ),
+                             const  Icon(Icons.arrow_forward_ios,color: secondaryTextFieldColor,size: 15,),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
-              ),
-            ],
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
         );
       },

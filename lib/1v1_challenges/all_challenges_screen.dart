@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:tournemnt/1v1_challenges/add_challenges.dart';
 import 'package:tournemnt/1v1_challenges/view_challnege_screen.dart';
+import 'package:tournemnt/consts/firebase_consts.dart';
 import 'package:tournemnt/reusbale_widget/custom_floating_action.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 
@@ -18,7 +20,7 @@ class ChallengesListScreen extends StatelessWidget {
         title: largeText(title: '1 v 1 Challenges',context: context),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('challenges').snapshots(),
+        stream: FirebaseFirestore.instance.collection(challengesCollection).snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -27,6 +29,8 @@ class ChallengesListScreen extends StatelessWidget {
           }
           return ListView(
             children: snapshot.data!.docs.map((doc) {
+              DateTime date = DateTime.parse(doc['startDate']); // Assuming 'startDate' is a string
+              String formattedDate = DateFormat('EEEE, yyyy/MM/dd').format(date); // You can adjust the format
               return Container(
                 margin: EdgeInsets.all(5),
                 child: ChallengeCard(
@@ -36,7 +40,7 @@ class ChallengesListScreen extends StatelessWidget {
                       CupertinoPageRoute(builder: (context) => ViewChallengeScreen(doc.id,userId,doc['isChallengeAccepted'])),
                     );
                   },
-                  startDate: doc['startDate'],
+                  startDate: formattedDate,
                   imagePath: doc['imagePath'],
                   challengerTeamName:doc['challengerTeamName'],
                   teamLeaderName:doc['teamLeaderName'] ,

@@ -11,7 +11,7 @@ Widget largeText(
   return Text(
     title,
     style: TextStyle(
-        fontSize: MediaQuery.textScaleFactorOf(context).toDouble() * fontSize,
+        fontSize: fontSize.toDouble(),
         fontWeight: FontWeight.bold,
       color: color,
     ),
@@ -28,7 +28,7 @@ Widget mediumText(
   return Text(
     title,
     style: TextStyle(
-      fontSize: MediaQuery.textScaleFactorOf(context).toDouble() * fontSize,
+      fontSize: fontSize.toDouble(),
       fontWeight: FontWeight.bold,
       color: color,
     ),
@@ -46,7 +46,7 @@ Widget smallText(
   return Text(
     title,
     style: TextStyle(
-      fontSize: MediaQuery.textScaleFactorOf(context).toDouble() * fontSize,
+      fontSize: fontSize.toDouble(),
       fontWeight: fontWeight,
       color: color,
     ),

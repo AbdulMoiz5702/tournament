@@ -5,7 +5,9 @@ class UserModel {
   final String location;
   final String myRole;
   final String phoneNumber;
-
+  final String token;
+  final bool isOnline;
+  final String imageLink;
   UserModel({
     required this.userId,
     required this.name,
@@ -13,6 +15,9 @@ class UserModel {
     required this.location,
     required this.myRole,
     required this.phoneNumber,
+    required this.token,
+    required this.isOnline,
+    required this.imageLink,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -23,6 +28,9 @@ class UserModel {
       location: map['location'],
       myRole: map['myRole'],
       phoneNumber: map['phoneNumber'],
+      token: map['token'],
+      isOnline: map['is_online'],
+      imageLink: map['imageLink'],
     );
   }
 
@@ -34,6 +42,9 @@ class UserModel {
       'location': location,
       'myRole': myRole,
       'phoneNumber': phoneNumber,
+      'token':token,
+      'is_online':isOnline,
+      'imageLink':imageLink
     };
   }
 }

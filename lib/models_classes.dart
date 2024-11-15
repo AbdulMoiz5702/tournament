@@ -12,6 +12,7 @@ class Tournament {
   final int totalTeam ;
   final int registerTeams;
   final String imagePath;
+  final String token;
   Tournament(
       {required this.id,
       required this.name,
@@ -26,6 +27,7 @@ class Tournament {
         required this.totalTeam,
         required this.registerTeams,
         required this.imagePath,
+        required this.token
       });
 }
 

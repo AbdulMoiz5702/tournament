@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:tournemnt/reusbale_widget/customLeading.dart';
+import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
-import 'package:tournemnt/reusbale_widget/toast_class.dart';
+import '../../controllers/Update_Tournament_controller.dart';
 import '../../models_classes.dart';
 import '../../reusbale_widget/custom_button.dart';
 import '../../reusbale_widget/custom_text_form_feild.dart';
@@ -19,57 +20,23 @@ class UpdateTournamentPage extends StatefulWidget {
 }
 
 class _UpdateTournamentPageState extends State<UpdateTournamentPage> {
-  final _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
 
-  late String name;
-  late String organizerName;
-  late String organizerPhoneNumber;
-  late String tournamentFee;
-  late String tournamentOvers;
-  late String location;
-  late String startDate;
+  var controller = Get.put(UpdateTournamentController());
+
 
   @override
   void initState() {
     super.initState();
-    name = widget.tournament.name;
-    organizerName = widget.tournament.organizerName;
-    organizerPhoneNumber = widget.tournament.organizerPhoneNumber;
-    tournamentFee = widget.tournament.tournamentFee;
-    tournamentOvers = widget.tournament.tournamentOvers;
-    location = widget.tournament.location;
-    startDate = widget.tournament.tournmentStartDate;
+    controller.name.value = widget.tournament.name;
+    controller.organizerName.value = widget.tournament.organizerName;
+    controller.organizerPhoneNumber.value = widget.tournament.organizerPhoneNumber;
+    controller.tournamentFee.value = widget.tournament.tournamentFee;
+    controller.tournamentOvers.value = widget.tournament.tournamentOvers;
+    controller.location.value = widget.tournament.location;
+    controller.startDate.value = widget.tournament.tournmentStartDate;
   }
 
-  void _updateTournament() async {
-    if (_formKey.currentState!.validate()) {
-      isLoading = true;
-      setState(() {});
-      _formKey.currentState!.save();
-      await FirebaseFirestore.instance
-          .collection('Tournaments')
-          .doc(widget.tournament.id)
-          .update({
-        'name': name,
-        'organizerName': organizerName,
-        'organizerPhoneNumber': organizerPhoneNumber,
-        'tournamentFee': tournamentFee,
-        'tournamentOvers': tournamentOvers,
-        'location': location,
-        'startDate': startDate,
-      }).then((value){
-        isLoading = false;
-        setState(() {});
-        Navigator.pop(context);
-      }).onError((error, stackTrace){
-        isLoading = false;
-        setState(() {});
-        throw ToastClass.showToastClass(context: context, message: 'Something went wrong');
-      });
 
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,62 +49,64 @@ class _UpdateTournamentPageState extends State<UpdateTournamentPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
-          key: _formKey,
+          key: controller.formKey,
           child: ListView(
             cacheExtent: 0,
             scrollDirection: Axis.vertical,
             children: <Widget>[
               Sized(height: 0.02,),
               CustomTextFormField(
-                initialValue: name,
+                initialValue: controller.name.value,
                 labelText: 'Name',
-                onSaved: (value) => name = value!,
+                onSaved: (value) => controller.name.value = value!,
                 validator: (value) => value!.isEmpty ? 'Please enter a name' : null,
               ),
               Sized(height: 0.02,),
               CustomTextFormField(
-                initialValue: organizerName,
+                initialValue: controller.organizerName.value,
                 labelText: 'Organizer Name',
-                onSaved: (value) => organizerName = value!,
+                onSaved: (value) => controller.organizerName.value = value!,
                 validator: (value) => value!.isEmpty ? 'Please enter the organizer name' : null,
               ),
               Sized(height: 0.02,),
               CustomTextFormField(
-                initialValue: organizerPhoneNumber,
+                initialValue:  controller.organizerPhoneNumber.value,
                 labelText: 'Organizer Phone Number',
-                onSaved: (value) => organizerPhoneNumber = value!,
+                onSaved: (value) =>  controller.organizerPhoneNumber.value = value!,
                 validator: (value) => value!.isEmpty ? 'Please enter the organizer phone number' : null,
               ),
               Sized(height: 0.02,),
               CustomTextFormField(
-                initialValue: tournamentFee,
+                initialValue: controller.tournamentFee.value,
                 labelText: 'Tournament Fee',
-                onSaved: (value) => tournamentFee = value!,
+                onSaved: (value) => controller.tournamentFee.value = value!,
                 validator: (value) => value!.isEmpty ? 'Please enter the tournament fee' : null,
               ),
               Sized(height: 0.02,),
               CustomTextFormField(
-                initialValue: tournamentOvers,
+                initialValue: controller.tournamentOvers.value,
                 labelText: 'Tournament Overs',
-                onSaved: (value) => tournamentOvers = value!,
+                onSaved: (value) => controller.tournamentOvers.value = value!,
                 validator: (value) => value!.isEmpty ? 'Please enter the tournament overs' : null,
               ),
               Sized(height: 0.02,),
               CustomTextFormField(
-                initialValue: location,
+                initialValue: controller.location.value,
                 labelText: 'Location',
-                onSaved: (value) => location = value!,
+                onSaved: (value) => controller.location.value = value!,
                 validator: (value) => value!.isEmpty ? 'Please enter the location' : null,
               ),
               Sized(height: 0.02,),
               CustomDateFormField(
-                initialValue: startDate,
+                initialValue: controller.startDate.value,
                 labelText: 'Start Date',
-                onSaved: (value) => startDate = value!,
+                onSaved: (value) => controller.startDate.value = value!,
                 validator: (value) => value!.isEmpty ? 'Please enter the start date' : null,
               ),
           SizedBox(height:MediaQuery.sizeOf(context).height * 0.03),
-          isLoading == true ? Center(child: const CircularProgressIndicator()) :CustomButton(title: 'Update', onTap: _updateTournament),
+          Obx(() => controller.isLoading.value == true ? const Center(child:  CustomIndicator()) :CustomButton(title: 'Update', onTap: (){
+            controller.updateTournament(tournamentId: widget.tournament.id, context: context);
+          }),)
             ],
           ),
         ),

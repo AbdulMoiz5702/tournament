@@ -10,9 +10,9 @@ import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
-
 import '../consts/colors.dart';
 import '../controllers/auth_controller.dart';
+import '../reusbale_widget/custom_indicator.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -85,7 +85,7 @@ class LoginPage extends StatelessWidget {
                 Sized(
                   height: 0.03,
                 ),
-                Obx(() =>authController.isLoading.value == true ? const Center(child: CircularProgressIndicator(color: blueColor,),) : CustomButton(
+                Obx(() =>authController.isLoading.value == true ? const CustomIndicator(): CustomButton(
                     title: 'Login',
                     onTap: () {
                       if(key.currentState!.validate()){

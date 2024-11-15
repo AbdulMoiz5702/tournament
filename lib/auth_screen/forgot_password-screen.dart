@@ -52,7 +52,6 @@ class ForgotScreen extends StatelessWidget {
                 if(key.currentState!.validate()){
                   try{
                     FirebaseAuth.instance.sendPasswordResetEmail(email: authController.emailController.text.toString()).then((value){
-                      ToastClass.showToastClass(context: context, message: " Password email has been sent");
                     });
                   }catch(e){
                     ToastClass.showToastClass(context: context, message: "Something went wrong Error : $e");

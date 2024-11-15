@@ -1,24 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tournemnt/consts/colors.dart';
+import 'package:tournemnt/consts/firebase_consts.dart';
 import 'package:tournemnt/public_tournmnets/teams/teams_screen.dart';
+import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
+import '../chat_screens/messages.dart';
 import '../models_classes.dart';
 import '../reusbale_widget/custom_floating_action.dart';
 import '../reusbale_widget/tournment-card.dart';
 import 'add_tournments.dart';
 
 
-class TournamentListPage extends StatefulWidget {
+class TournamentListPage extends StatelessWidget {
   final String userId ;
-  TournamentListPage({required this.userId});
-  @override
-  State<TournamentListPage> createState() => _TournamentListPageState();
-}
-
-class _TournamentListPageState extends State<TournamentListPage> {
+  const TournamentListPage({super.key, required this.userId});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +27,7 @@ class _TournamentListPageState extends State<TournamentListPage> {
         title: largeText(title: 'Tournaments',context: context,fontWeight: FontWeight.w200,color: secondaryTextColor),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('Tournaments').snapshots(),
+        stream: fireStore.collection(tournamentsCollection).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -37,11 +36,12 @@ class _TournamentListPageState extends State<TournamentListPage> {
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child:CustomIndicator(height: 0.1,width: 0.2,),
             );
           }
           final List<Tournament> tournaments = snapshot.data!.docs.map((doc) {
             return Tournament(
+              token:doc['token'] ?? '--/--/-',
               id: doc.id,
               name: doc['name'] ?? '--/--/-',
               organizerName:doc['organizerName'] ?? '--/--/-',
@@ -64,12 +64,15 @@ class _TournamentListPageState extends State<TournamentListPage> {
             itemCount: tournaments.length,
             itemBuilder: (context, index) {
               DateTime date = DateTime.parse(tournaments[index].tournmentStartDate,);
-              String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+              String formattedDate = DateFormat('EEEE, yyyy/MM/dd').format(date);
               return TournamentCard(
+                onMessage: (){
+                  Get.to(()=> MessageScreen(receiverId: tournaments[index].organizerId,receiverName: tournaments[index].organizerName,receiverToken: tournaments[index].token,userId:userId,));
+                },
                 imagePath: tournaments[index].imagePath ,
                 totalTeams:tournaments[index].totalTeam ,
                 registerTeams: tournaments[index].registerTeams,
-                userId: widget.userId,
+                userId: userId,
                 organizerId:tournaments[index].organizerId,
                 tournamentName: tournaments[index].name,
                 organizerName: tournaments[index].organizerName,
@@ -83,7 +86,7 @@ class _TournamentListPageState extends State<TournamentListPage> {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => TeamListPage(tournamentId: tournaments[index].id,userId: widget.userId,isHomeScreen: true,isCompleted: tournaments[index].isCompleted,registerTeams:tournaments[index].registerTeams,totalTeam: tournaments[index].totalTeam,),
+                      builder: (context) => TeamListPage(tournamentId: tournaments[index].id,userId: userId,isHomeScreen: true,isCompleted: tournaments[index].isCompleted,registerTeams:tournaments[index].registerTeams,totalTeam: tournaments[index].totalTeam,token: tournaments[index].token,),
                     ),
                   );
                 },
@@ -96,7 +99,7 @@ class _TournamentListPageState extends State<TournamentListPage> {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => AddTournamentPage(userId: widget.userId,),
+            builder: (context) => AddTournamentPage(userId: userId,),
           ),
         );
       },),

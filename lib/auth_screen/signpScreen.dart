@@ -6,6 +6,7 @@ import 'package:tournemnt/auth_screen/login_Screen.dart';
 import 'package:tournemnt/consts/colors.dart';
 import 'package:tournemnt/controllers/auth_controller.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
+import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
@@ -145,7 +146,7 @@ class SignupScreen extends StatelessWidget {
                 Sized(
                   height: 0.03,
                 ),
-                Obx(() => authController.isLoading.value == true ?const  Center(child: CircularProgressIndicator(color: blueColor,),):  CustomButton(
+                Obx(() => authController.isLoading.value == true ?const  CustomIndicator():  CustomButton(
                     title: 'Create Account',
                     onTap: () {
                       if(key.currentState!.validate() ){

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tournemnt/consts/colors.dart';
+import 'package:tournemnt/consts/images_path.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
@@ -19,6 +20,7 @@ class TournamentCard extends StatelessWidget {
   final int totalTeams ;
   final int registerTeams ;
   final String imagePath ;
+  final VoidCallback ? onMessage ;
   const TournamentCard(
       {required this.tournamentName,
       required this.organizerName,
@@ -33,7 +35,8 @@ class TournamentCard extends StatelessWidget {
         required this.organizerId,
         required this.totalTeams,
         required this.registerTeams,
-        required this.imagePath
+        required this.imagePath,
+        this.onMessage,
       });
   @override
   Widget build(BuildContext context) {
@@ -53,7 +56,7 @@ class TournamentCard extends StatelessWidget {
               color: secondaryWhiteColor,
               borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight:Radius.circular(15) )
             ),
-            child: Center(child: mediumText(title: 'Tournament ${tournamentName.toUpperCase()}',color: blueColor,context: context)),
+            child: Center(child: mediumText(title: '${tournamentName.toUpperCase()}',color: blueColor,context: context)),
           ),
           Container(
             padding: EdgeInsets.all(8),
@@ -72,6 +75,7 @@ class TournamentCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                          CircleAvatar(
+                           backgroundColor: secondaryTextColor,
                           radius: 25,
                           backgroundImage: AssetImage(imagePath),
                         ),
@@ -80,7 +84,16 @@ class TournamentCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             mediumText(title: organizerName,context: context),
-                            smallText(title: organizerPhoneNumber,context: context,fontSize: 13.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                smallText(title: organizerPhoneNumber,context: context,fontSize: 13.0),
+                                Sized(height: 0,width: 0.03,),
+                                InkWell(
+                                  onTap: onMessage,
+                                    child: Image.asset(chat,height: 25,width: 25,),),
+                              ],
+                            ),
                           ],
                         ),
                       ],

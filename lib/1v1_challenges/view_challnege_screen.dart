@@ -1,99 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:tournemnt/consts/firebase_consts.dart';
 import 'package:tournemnt/reusbale_widget/Custom_slider.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
+import '../controllers/view_challenge_controller.dart';
 import '../reusbale_widget/accepter_card.dart';
-import '../reusbale_widget/toast_class.dart';
 import 'addteam_to_challenge_screen.dart';
 
-class ViewChallengeScreen extends StatefulWidget {
+class ViewChallengeScreen extends StatelessWidget {
   final String challengeId;
   final String userId;
   final String isChallengeAccepted ;
-
   ViewChallengeScreen(this.challengeId,this.userId,this.isChallengeAccepted);
-
-  @override
-  State<ViewChallengeScreen> createState() => _ViewChallengeScreenState();
-}
-
-class _ViewChallengeScreenState extends State<ViewChallengeScreen> {
-
-  void _deleteTeam(BuildContext context, String teamId) async {
-    try {
-      await FirebaseFirestore.instance.collection('challenges').doc(widget.challengeId).collection('teams').doc(teamId).delete();
-      ToastClass.showToastClass(context: context, message: 'Team Deleted Successfully');
-    } catch (e) {
-      ToastClass.showToastClass(context: context, message: 'Failed to delete team: $e');
-    }
-  }
-
-  void _updateTeam(BuildContext context, String teamId, Map<String, dynamic> newData) async {
-    try {
-      await FirebaseFirestore.instance.collection('challenges').doc(widget.challengeId).collection('teams').doc(teamId).update(newData);
-      ToastClass.showToastClass(context: context, message: 'Team Updated Successfully');
-    } catch (e) {
-      ToastClass.showToastClass(context: context, message: 'Failed to update team: $e');
-    }
-  }
-
-  void _showEditDialog(BuildContext context, String teamId, String  teamName, String teamLeaderName ,String teamLeaderPhone, String location ) {
-    TextEditingController teamNameController = TextEditingController(text: teamName);
-    TextEditingController leaderNameController = TextEditingController(text: teamLeaderName);
-    TextEditingController leaderPhoneController = TextEditingController(text: teamLeaderPhone);
-    TextEditingController locationController = TextEditingController(text: location);
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Edit Team'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(controller: teamNameController, decoration: InputDecoration(labelText: 'Team Name')),
-                TextField(controller: leaderNameController, decoration: InputDecoration(labelText: 'Leader Name')),
-                TextField(controller: leaderPhoneController, decoration: InputDecoration(labelText: 'Leader Phone')),
-                TextField(controller: locationController, decoration: InputDecoration(labelText: 'Location')),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Map<String, dynamic> newData = {
-                  'teamName': teamNameController.text,
-                  'teamLeaderName': leaderNameController.text,
-                  'teamLeaderPhone': leaderPhoneController.text,
-                  'location': locationController.text,
-                };
-                _updateTeam(context, teamId, newData);
-                Navigator.of(context).pop();
-              },
-              child: Text('Update'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(ViewChallengesController());
     return Scaffold(
       appBar: AppBar(
         title: largeText(title: 'Challenge Details',context: context),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('challenges').doc(widget.challengeId).snapshots(),
+        stream: FirebaseFirestore.instance.collection(challengesCollection).doc(challengeId).snapshots(),
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -108,7 +40,7 @@ class _ViewChallengeScreenState extends State<ViewChallengeScreen> {
                 margin: EdgeInsets.all(5),
                 child: AccepterCard(
                   imagePath: '${challengeData?['imagePath'] ?? '---/--/-'}',
-                  userId:widget.userId,
+                  userId:userId,
           accpterId: '${challengeData?['challenger'] ?? '---/--/-'}',
           accepterTeamName:'${challengeData?['challengerTeamName'] ?? '---/--/-'}',
             location: '${challengeData?['location'] ?? '---/--/-'}',
@@ -118,10 +50,10 @@ class _ViewChallengeScreenState extends State<ViewChallengeScreen> {
           ),
               ),
               Sized(height: 0.02,),
-              widget.isChallengeAccepted == 'true'? Container(height: 5,): CustomButton(
+              isChallengeAccepted == 'true'? Container(height: 5,): CustomButton(
                 onTap: () {Navigator.push(
                     context,
-                    CupertinoPageRoute(builder: (context) => AddTeamToChallengeScreen(widget.challengeId,widget.userId)),
+                    CupertinoPageRoute(builder: (context) => AddTeamToChallengeScreen(challengeId,userId)),
                   );},
                 title: 'Accept Challenge',
               ),
@@ -129,7 +61,7 @@ class _ViewChallengeScreenState extends State<ViewChallengeScreen> {
               mediumText(title: 'VS',context: context),
               Sized(height: 0.02,),
               StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('challenges').doc(widget.challengeId).collection('teams').snapshots(),
+                stream: FirebaseFirestore.instance.collection(challengesCollection).doc(challengeId).collection(challengesTeamCollection).snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
                     return const  Center(
@@ -143,14 +75,14 @@ class _ViewChallengeScreenState extends State<ViewChallengeScreen> {
                         child: CustomSlider(
                           isTeamScreen: false,
                           deleteOnPressed: (context){
-                            _deleteTeam(context, doc.id);
+                            controller.deleteTeam(context: context, teamId: doc.id, challengeId: challengeId);
                           },
                           editOnPressed: (context){
-                            _showEditDialog(context, doc.id,doc['teamName'],doc['teamLeaderName'],doc['teamLeaderPhone'],doc['location']);
+                            controller.showEditDialog(context: context, teamId: doc.id, teamName: doc['teamName'], teamLeaderName: doc['teamLeaderName'], teamLeaderPhone: doc['teamLeaderPhone'], location: doc['location'], challengeId: challengeId);
                           },
                           child: AccepterCard(
                             imagePath: doc['imageLink'],
-                          userId: widget.userId,
+                          userId: userId,
                             accpterId:doc['accepterId'],
                             accepterTeamName:doc['teamName'],
                             location: doc['location'],
