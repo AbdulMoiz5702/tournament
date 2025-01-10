@@ -1,5 +1,5 @@
 name: tournemnt
-description: A new Flutter project.
+description: Cricket Place is the app to manage cricket tournaments and challenges.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.0+4
 
 environment:
   sdk: '>=3.1.4 <4.0.0'
@@ -47,7 +47,6 @@ dependencies:
   flutter_sound: ^9.6.0
   path_provider:
   permission_handler:
-  uuid:
   voice_message_player:
   zego_uikit_prebuilt_call:
   zego_uikit:
@@ -57,6 +56,8 @@ dependencies:
   cached_network_image:
   firebase_messaging:
   flutter_local_notifications:
+  flutter_svg:
+  google_fonts:
 
 
 dev_dependencies:
@@ -68,7 +69,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -84,6 +85,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/svg_images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

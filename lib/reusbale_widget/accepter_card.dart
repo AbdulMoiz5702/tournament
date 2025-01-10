@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
+import 'package:tournemnt/reusbale_widget/tournment-card.dart';
 import '../consts/colors.dart';
+import '../consts/images_path.dart';
 import 'custom_sizedBox.dart';
 
 
@@ -13,6 +16,7 @@ class AccepterCard extends StatelessWidget {
   final String userId ;
   final String accpterId;
   final String imagePath;
+  final VoidCallback ? onMessage ;
   const AccepterCard(
       {required this.accepterTeamName,
         required this.teamLeaderName,
@@ -22,87 +26,90 @@ class AccepterCard extends StatelessWidget {
         required this.onTap ,
         required this.accpterId,
         required this.imagePath,
+        this.onMessage
       });
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height ;
     double width = MediaQuery.sizeOf(context).width ;
+    String toTitleCase(String text) {
+      if (text.isEmpty) return text;
+      return text
+          .split(' ')
+          .map((word) => word.isEmpty ? word : word[0].toUpperCase() + word.substring(1).toLowerCase())
+          .join(' ');
+    }
     return Container(
-      margin: const EdgeInsets.only(top: 7),
-      alignment: Alignment.center,
+      margin: EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.all(8),
       width: width * 1,
+      decoration:  BoxDecoration(
+        color: bgTeamCard,
+        borderRadius: BorderRadius.circular(30),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: width * 0.7,
-            height: height * 0.06,
-            decoration: const BoxDecoration(
-                color: secondaryWhiteColor,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight:Radius.circular(15) )
-            ),
-            child: Center(child: mediumText(title: 'Team ${accepterTeamName.toUpperCase()}',color: blueColor,context: context)),
-          ),
-          Container(
-            padding: EdgeInsets.all(8),
-            width: width * 1,
-            decoration:  BoxDecoration(
-              color: secondaryWhiteColor,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              children: [
-                Row(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: whiteColor,
+                    radius: 25,
+                    backgroundImage: AssetImage(imagePath),
+                  ),
+                  Sized(width: 0.04,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      mediumText(title: toTitleCase(teamLeaderName),context: context,fontSize: 12,fontWeight: FontWeight.w500,color: cardTextColor),
+                      smallText(title: accepterLeaderPhone,context: context,fontSize: 10.0,fontWeight: FontWeight.w500,color: cardTextColor),
+                      Sized(height: 0,width: 0.03,),
+                    ],
+                  ),
+                ],
+              ),
+              userId == accpterId ? Container(
+                alignment: Alignment.center,
+                height: height * 0.043,
+                width: width * 0.3,
+                decoration: BoxDecoration(
+                  color: cardMyTournament,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child:Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundImage: AssetImage(imagePath),
-                        ),
-                        Sized(width: 0.04,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            mediumText(title: teamLeaderName,context: context),
-                            smallText(title: accepterLeaderPhone,context: context,fontSize: 13.0),
-                          ],
-                        ),
-                      ],
-                    ),
+                    Icon(Icons.circle,size: 5,color: greenColor,),
+                    Sized(width: 0.01,),
+                    smallText(title: 'My Team',context: context,color: cardTextColor,fontSize: 10),
                   ],
                 ),
-                Sized(height: 0.02,),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.location_on,color: secondaryTextColor,),
-                        Sized(width: 0.02,),
-                        smallText(title: location,context: context),
-                      ],
-                    ),
-                    userId == accpterId ? Container(
-                      alignment: Alignment.center,
-                      height: height * 0.041,
-                      width: width * 0.25,
-                      decoration: BoxDecoration(
-                        color: secondaryTextFieldColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child:smallText(title: 'Your\'s  Team',context: context,color: blueColor,fontWeight: FontWeight.bold),
-                    ) :  Container(height: 1,width: 1,),
-                  ],
-                ),
-                Sized(height: 0.02,),
-              ],
-            ),
+              ) :  Container(height: 1,width: 1,),
+              InkWell(
+                onTap: onMessage,
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: cardCallButtonColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: SvgPicture.asset(chatIcon),),),
+            ],
           ),
+          Sized(height: 0.02,),
+          Align(
+              alignment: Alignment.centerLeft,
+              child: largeText(title: toTitleCase(accepterTeamName),fontSize: 24,fontWeight: FontWeight.w500)),
+          Sized(height: 0.02,),
+          infoBox(title: location, icon: Icons.place_outlined,context: context),
+          Sized(height: 0.02,),
         ],
       ),
     );

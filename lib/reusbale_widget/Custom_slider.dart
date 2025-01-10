@@ -4,7 +4,7 @@ import 'package:tournemnt/consts/colors.dart';
 
 
 class CustomSlider extends StatelessWidget {
-  CustomSlider({required this.child,required this.deleteOnPressed,required this.editOnPressed,this.key,this.isHomeScreen = false,this.isTeamScreen = false,this.editOnPressedTeamScreen});
+  CustomSlider({required this.child,required this.deleteOnPressed,required this.editOnPressed,this.key,this.isHomeScreen = false,this.isTeamScreen = false,this.editOnPressedTeamScreen,this.labelEdit = 'Edit',this.labelDelete = 'Delete',this.labelDisqualify = 'Disqualify'});
   final void Function(BuildContext)  ? editOnPressed;
   final void Function(BuildContext)  ? editOnPressedTeamScreen;
   final void Function(BuildContext)  deleteOnPressed;
@@ -12,7 +12,9 @@ class CustomSlider extends StatelessWidget {
   final bool isHomeScreen;
   final Key ? key;
   final bool isTeamScreen ;
-
+  final String labelEdit ;
+  final String labelDelete;
+  final String labelDisqualify;
 
 
   @override
@@ -27,8 +29,11 @@ class CustomSlider extends StatelessWidget {
             children: [
               // settings option
               isHomeScreen == true ?  Container(height: 1,width: 1,): SlidableAction(
+                foregroundColor: isTeamScreen == false ? whiteColor : greenColor,
+                  flex: isTeamScreen == false ? 1 : 5,
                   onPressed: editOnPressed,
-                  backgroundColor: statusContainer3,
+                  backgroundColor: isTeamScreen == false ?sliderEditColor : qualifyColorSlider,
+                  label: labelEdit,
                   icon: isTeamScreen == false ? Icons.edit : Icons.check_circle_outline_outlined,
                 borderRadius:const BorderRadius.only(
                   topLeft: Radius.circular(15),
@@ -37,23 +42,26 @@ class CustomSlider extends StatelessWidget {
               ),
               isTeamScreen == false ?  Container(height: 1,width: 1,): SlidableAction(
                 autoClose:true,
+                flex: isTeamScreen == false ? 1 : 5,
+                label:labelDisqualify,
                 onPressed: editOnPressedTeamScreen,
-                backgroundColor: redColor,
+                backgroundColor:disqualifyColorSlider,
                 icon: isTeamScreen == false ? Icons.edit : Icons.unpublished_outlined,
+                foregroundColor: redColor,
               ),
               // delete option
               isHomeScreen == true ?  Container(height: 1,width: 1,): SlidableAction(
                 autoClose:true,
+                flex: isTeamScreen == false ? 1 : 5,
+                label:labelDelete,
                 onPressed: deleteOnPressed,
-                backgroundColor: deleteColor,
+                backgroundColor:isTeamScreen == false? sliderDeleteColor : deleteColorSlider,
                 icon: Icons.delete,
                 borderRadius:const BorderRadius.only(
                   topRight: Radius.circular(15),
                   bottomRight: Radius.circular(15),
                 ),
               ),
-
-
             ],
           ),
           child: child ),

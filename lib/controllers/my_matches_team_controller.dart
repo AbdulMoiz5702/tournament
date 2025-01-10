@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tournemnt/consts/firebase_consts.dart';
+import 'package:tournemnt/consts/images_path.dart';
+import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import '../consts/colors.dart';
 import '../models_classes.dart';
 import '../reusbale_widget/custom_sizedBox.dart';
@@ -21,14 +23,17 @@ class MyMatchesTeamController extends GetxController {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete this team?'),
+          backgroundColor: whiteColor,
+          title: mediumText(title: 'Confirm Delete'),
+          content: smallText(title: 'Are you sure you want to remove your team from the tournament?',fontWeight: FontWeight.w500,color:loginEnabledButtonColor ),
           actions: [
             TextButton(
+              style: ButtonStyle(foregroundColor:  MaterialStateProperty.all(tCardBgColor)),
               onPressed: () => Navigator.of(context).pop(),
               child: Text('Cancel'),
             ),
             TextButton(
+              style: ButtonStyle(foregroundColor:  MaterialStateProperty.all(tCardBgColor)),
               onPressed: () => deleteTeam(context: context,teamId: teamId),
               child: Text('Delete'),
             ),
@@ -69,35 +74,37 @@ class MyMatchesTeamController extends GetxController {
     TextEditingController(text: team.teamLeaderPhoneNumber);
     TextEditingController locationController =
     TextEditingController(text: team.teamLocation);
-
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: backGroundColor,
-          title: Text('Edit Team'),
+          backgroundColor: whiteColor,
+          title: mediumText(title: 'Edit Team'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Sized(height: 0.01,),
+                Sized(height: 0.03,),
                 CustomTextField(
+                  imagePath: personIcon,
                   controller: nameController,
                   hintText: 'Team Name',
                   validate: (value) {
                     return value.isEmpty ? 'Team Name required': null ;
                   },
                 ),
-                Sized(height: 0.01,),
+                Sized(height: 0.03,),
                 CustomTextField(
+                  imagePath: personIcon,
                   controller: leaderNameController,
                   hintText: 'Team Leader Name',
                   validate: (value) {
                     return value.isEmpty ? 'Team Leader Name required': null ;
                   },
                 ),
-                Sized(height: 0.01,),
+                Sized(height: 0.03,),
                 CustomTextField(
+                  imagePath: phoneIcon,
                   controller: leaderPhoneController,
                   hintText: 'Leader Phone Number',
                   validate: (value) {
@@ -105,8 +112,9 @@ class MyMatchesTeamController extends GetxController {
                   },
                   keyboardType: TextInputType.number,
                 ),
-                Sized(height: 0.01,),
+                Sized(height: 0.03,),
                 CustomTextField(
+                  imagePath: addressIcon,
                   controller: locationController,
                   hintText: 'Leader Phone Number',
                   validate: (value) {
@@ -118,10 +126,12 @@ class MyMatchesTeamController extends GetxController {
           ),
           actions: [
             TextButton(
+              style: ButtonStyle(foregroundColor:  MaterialStateProperty.all(tCardBgColor)),
               onPressed: () => Navigator.of(context).pop(),
               child: Text('Cancel'),
             ),
             TextButton(
+              style: ButtonStyle(foregroundColor:  MaterialStateProperty.all(tCardBgColor)),
               onPressed: () {
                 updateTeam(
                  context: context,

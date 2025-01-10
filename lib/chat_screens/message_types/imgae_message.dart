@@ -54,12 +54,12 @@ class ImgaeMessageWidget extends StatelessWidget {
                   : Radius.circular(0),
             ),
             boxShadow:  controller.currentIndex.value == index ? controller.isMessageSelected.value ==  true ? [
-              BoxShadow(color: primaryTextColor,blurRadius: 5,spreadRadius: 7),
+              BoxShadow(color: cardPartColor,blurRadius: 5,spreadRadius: 7),
             ]: [] :  [],
             border: Border.all(
               color: isCurrentUser
-                  ? primaryTextColor
-                  : roleBoxColor,
+                  ? cardTextColor
+                  : cardMyTournament,
               width: 4,
             ),
           ),

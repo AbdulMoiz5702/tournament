@@ -58,16 +58,16 @@ class AddTeamTournamentController extends GetxController {
 
   selectImage(BuildContext context) async {
     await showModalBottomSheet(
-      backgroundColor:primaryTextColor,
-      shape: RoundedRectangleBorder(
+      backgroundColor:loginEnabledButtonColor,
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
       ),
       isScrollControlled: true,
       context: context,
       builder: (BuildContext context) {
         return Container(
-          decoration: BoxDecoration(
-            color: primaryTextColor,
+          decoration: const BoxDecoration(
+            color: loginEnabledButtonColor,
             borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
           ),
           height: MediaQuery.sizeOf(context).height * 0.5,
@@ -77,14 +77,14 @@ class AddTeamTournamentController extends GetxController {
               Sized(height: 0.03,),
               Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: primaryTextColor,
+                  padding: const EdgeInsets.all(5),
+                  decoration: const BoxDecoration(
+                    color: loginEnabledButtonColor,
                   ),
                   child: mediumText(title: 'Select Team Avatar',color: whiteColor,context: context)),
               Sized(height: 0.03,),
               Container(
-                  color: primaryTextColor,
+                  color: loginEnabledButtonColor,
                   height: MediaQuery.sizeOf(context).height * 0.35,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -147,6 +147,7 @@ class AddTeamTournamentController extends GetxController {
         'imageLink':selectedImage.toString(),
         'roundsQualify':'none',
         'token':userToken,
+        'vs':false,
       }).then((value){
         nameController.clear();
         teamLeaderName.clear();

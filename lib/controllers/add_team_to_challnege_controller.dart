@@ -47,7 +47,7 @@ class AddTeamToChallenge extends GetxController {
 
   selectImage(BuildContext context) async {
     await showModalBottomSheet(
-      backgroundColor:primaryTextColor,
+      backgroundColor:loginEnabledButtonColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
       ),
@@ -56,7 +56,7 @@ class AddTeamToChallenge extends GetxController {
       builder: (BuildContext context) {
         return Container(
           decoration: BoxDecoration(
-            color: primaryTextColor,
+            color: loginEnabledButtonColor,
             borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
           ),
           height: MediaQuery.sizeOf(context).height * 0.5,
@@ -67,12 +67,12 @@ class AddTeamToChallenge extends GetxController {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: primaryTextColor,
+                    color: loginEnabledButtonColor,
                   ),
                   child: mediumText(title: 'Select Your Avatar',color: whiteColor,context: context)),
               Sized(height: 0.03,),
               Container(
-                  color: primaryTextColor,
+                  color: loginEnabledButtonColor,
                   height: MediaQuery.sizeOf(context).height * 0.35,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,

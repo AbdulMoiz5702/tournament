@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:tournemnt/consts/firebase_consts.dart';
 import 'package:tournemnt/consts/images_path.dart';
 
@@ -19,16 +20,21 @@ class AddChallengesController extends GetxController {
 
 
   var controller = Get.find<ZegoCloudController>();
-
   var teamName = TextEditingController();
   late TextEditingController captainName  ;
   late  TextEditingController location ;
   late TextEditingController leaderPhone ;
-  var matchOvers = TextEditingController();
+  var challengeType = TextEditingController();
   var startDateController = TextEditingController();
+  var startDateTimeController = TextEditingController(); // Add this controller for the start date
+  var areaLevel = TextEditingController();
   var isLoading = false.obs;
   var selectedDate = Rxn<DateTime>();
   var selectedImage = Rxn<String>();
+  var selectedTime = TimeOfDay.now().obs;
+  var currentIndexOver = (-1).obs;
+  var currentIndexAge = (-1).obs;
+  var currentIndexArea = (-1).obs;
 
   @override
   void onInit() {
@@ -45,12 +51,26 @@ class AddChallengesController extends GetxController {
     captainName.dispose();
     location.dispose();
     leaderPhone.dispose();
-    matchOvers.dispose();
+    challengeType.dispose();
     startDateController.dispose();
     teamName.dispose();
   }
 
+  selectRadioOver(index){
+    currentIndexOver.value = index;
+  }
 
+  selectRadioAge(index){
+    currentIndexAge.value = index;
+  }
+
+  selectRadioArea(index){
+    currentIndexArea.value = index;
+  }
+
+  String getSelectRadioOver() {
+    return '${overTypeList[currentIndexOver.value]} | ${ageLevelList[currentIndexAge.value]} | ${currentIndexArea.value == 2 ? areaLevel.text.trim():areaLevelListChallenge[currentIndexArea.value]}';
+  }
 
 
   addChallenge({required BuildContext context ,}) {
@@ -63,12 +83,15 @@ class AddChallengesController extends GetxController {
         'teamLeaderName': description,
         'location':location.text.toString(),
         'challengerLeaderPhone':leaderPhone.text.toString(),
-        'Overs':matchOvers.text.toString(),
+        'Over':overTypeList[currentIndexOver.value].toString(),
+        'age':ageLevelList[currentIndexAge.value].toString(),
+        'area': currentIndexArea.value == 2 ? areaLevel.text.trim():areaLevelList[currentIndexArea.value],
         'isChallengeAccepted':'false',
         'teamCount': 1,
         'challenger':currentUser!.uid,
         'token':userToken,
         'startDate': selectedDate.toString(),
+        'startTime':selectedTime.toString(),
         'imagePath':selectedImage.toString(),
       }).then((value) {
         isLoading(false);
@@ -112,17 +135,43 @@ class AddChallengesController extends GetxController {
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            datePickerTheme: DatePickerThemeData(
+              dividerColor: whiteColor,
+              confirmButtonStyle: ButtonStyle(
+                foregroundColor: WidgetStateProperty.all<Color>(whiteColor),
+                backgroundColor: WidgetStateProperty.all<Color>(cardBgColor),
+              ),
+              cancelButtonStyle: ButtonStyle(
+                foregroundColor: WidgetStateProperty.all<Color>(whiteColor),
+                backgroundColor: WidgetStateProperty.all<Color>(cardCallButtonColor),
+              ),
+            ),
+            colorScheme: const ColorScheme.light(
+              primary: cardTextColor, // Header background color
+              onPrimary: whiteColor, // Header text color
+              surface: cardTextColor, // Background color of calendar picker
+              onSurface: whiteColor, // Text color
+            ),
+            dialogBackgroundColor: cardTextColor,
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null && picked != selectedDate.value) {
-        selectedDate.value = picked;
-        startDateController.text = "${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year}";
+      selectedDate.value = picked;
+      startDateController.text = "${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year}";
     }
   }
 
+
   selectImage(BuildContext context) async {
     await showModalBottomSheet(
-      backgroundColor:primaryTextColor,
-      shape: RoundedRectangleBorder(
+      backgroundColor:loginEnabledButtonColor,
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
       ),
       isScrollControlled: true,
@@ -136,14 +185,14 @@ class AddChallengesController extends GetxController {
               Sized(height: 0.03,),
               Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: primaryTextColor,
+                  padding: const EdgeInsets.all(5),
+                  decoration: const BoxDecoration(
+                    color: loginEnabledButtonColor,
                   ),
                   child: mediumText(title: 'Select Your Avatar',color: whiteColor,context: context)),
               Sized(height: 0.03,),
               Container(
-                  color: primaryTextColor,
+                  color: loginEnabledButtonColor,
                   height: MediaQuery.sizeOf(context).height * 0.35,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -189,6 +238,95 @@ class AddChallengesController extends GetxController {
         );
       },
     );
+  }
+
+  Future<void> selectTime(BuildContext context) async {
+    var theme = Theme.of(context);
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime.value,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: Theme(
+            data: ThemeData.light().copyWith(
+              timePickerTheme: TimePickerThemeData(
+                entryModeIconColor: whiteColor,
+                helpTextStyle: TextStyle(color: whiteColor),
+                dayPeriodBorderSide: BorderSide(color: cardBgColor),
+                confirmButtonStyle: ButtonStyle(
+                  foregroundColor: WidgetStateProperty.all<Color>(whiteColor),
+                  backgroundColor: WidgetStateProperty.all<Color>(cardBgColor),
+                ),
+                cancelButtonStyle: ButtonStyle(
+                  foregroundColor: WidgetStateProperty.all<Color>(whiteColor),
+                  backgroundColor: WidgetStateProperty.all<Color>(cardCallButtonColor),
+                ),
+                dialTextColor: blackColor,
+                backgroundColor: cardTextColor,
+                hourMinuteTextColor: whiteColor,
+                dialHandColor: loginEnabledButtonColor,
+                dialBackgroundColor:whiteColor,
+                shape: RoundedRectangleBorder(
+                  side:  BorderSide(color: theme.scaffoldBackgroundColor),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                dayPeriodColor: WidgetStateColor.resolveWith(
+                      (states) => theme.scaffoldBackgroundColor, // Set to white
+                ),
+                dayPeriodTextColor: WidgetStateColor.resolveWith(
+                      (states) => whiteColor,
+                ),
+                dayPeriodShape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero, // Remove the border radius
+                  side: BorderSide.none, // Remove the border
+                ),
+                hourMinuteColor: WidgetStateColor.resolveWith(
+                      (states) => theme.scaffoldBackgroundColor, // Change this to white
+                ),
+                hourMinuteShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                inputDecorationTheme: InputDecorationTheme(
+                  fillColor: theme.scaffoldBackgroundColor,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                dayPeriodTextStyle:  TextStyle(
+                  color: buttonColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            child: child!,
+          ),
+        );
+      },
+    );
+
+    if (picked != null && picked != selectedTime.value) {
+      selectedTime.value = TimeOfDay(
+        hour: picked.hour,
+        minute: (picked.minute ~/ 5) * 5,
+      );
+      startDateTimeController.text = formatTime(); // Update controller
+    }
+  }
+
+  bool isSelectedTimeValid(TimeOfDay selectedTime) {
+    final now = DateTime.now();
+    final selectedDateTime = DateTime(now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
+    final thresholdTime = now.add(const Duration(days: 1));
+    return selectedDateTime.isAfter(thresholdTime);
+  }
+
+  String formatTime() {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, selectedTime.value.hour, selectedTime.value.minute);
+    var format = DateFormat.jm();
+    return format.format(dt);
   }
 
 

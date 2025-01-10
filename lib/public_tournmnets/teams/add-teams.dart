@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tournemnt/consts/colors.dart';
+import 'package:tournemnt/consts/images_path.dart';
+import 'package:tournemnt/reusbale_widget/bg_widgets.dart';
 import 'package:tournemnt/reusbale_widget/customLeading.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
@@ -21,7 +23,7 @@ class AddTeamPage extends StatefulWidget {
   final String userId;
   final int registerTeams ;
   final String token ;
-  AddTeamPage({required this.tournamentId,required this.userId,required this.registerTeams,required this.token});
+  const AddTeamPage({super.key,required this.tournamentId,required this.userId,required this.registerTeams,required this.token});
   @override
   State<AddTeamPage> createState() => _AddTeamPageState();
 }
@@ -39,75 +41,117 @@ class _AddTeamPageState extends State<AddTeamPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        automaticallyImplyLeading: true,
-        title: largeText(title: 'Add Team',context: context),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: key,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Obx(() => Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: secondaryWhiteColor,
-                    borderRadius: BorderRadius.circular(10),
-                    image: controller.selectedImage.value != null
-                        ? DecorationImage(image: AssetImage(controller.selectedImage.value!))
-                        : null,
+    return BgWidget(
+      child: Scaffold(
+        backgroundColor: transparentColor,
+        appBar: AppBar(
+          leading: CustomLeading(),
+          bottom: PreferredSize(
+            preferredSize: Size(double.infinity, 55),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.sizeOf(context).width * 0.1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Sized(height: 0.005),
+                      largeText(
+                        title: 'Add Team Info  ',
+                        context: context,
+                        fontWeight: FontWeight.w500,
+                        color: whiteColor,
+                      ),
+                      Sized(height: 0.005),
+                      smallText(
+                        title: 'Enter Your Valid Information .',
+                        color: secondaryTextColor.withOpacity(0.85),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      Sized(height: 0.005),
+                    ],
                   ),
-                  height: MediaQuery.sizeOf(context).height * 0.16,
-                  width: MediaQuery.sizeOf(context).width * 0.3,
-                  child:  IconButton(onPressed: (){
-                    controller.selectImage(context);
-                  }, icon: const Icon(Icons.camera_alt_outlined,color:blueColor,),),
-                ),),
-                Sized(height: 0.03,),
-                CustomTextField(
+                ],
+              ),
+            ),
+          ),
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal:20),
+          color: whiteColor,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Form(
+              key: key,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Obx(
+                        ()=> Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: cardTextColor,
+                        shape: BoxShape.circle,
+                        image: controller.selectedImage.value != null
+                            ? DecorationImage(image: AssetImage(controller.selectedImage.value!))
+                            : null,
+                      ),
+                      height: MediaQuery.sizeOf(context).height * 0.16,
+                      width: MediaQuery.sizeOf(context).width * 0.3,
+                      child:   IconButton(onPressed: (){
+                        controller.selectImage(context);
+                      }, icon: const Icon(Icons.camera_alt_outlined,color:cardMyTournament,),),
+                    ),
+                  ),
+                  Sized(height: 0.035,),
+                  CustomTextField(
+                    imagePath: personIcon,
+                      validate: (value){
+                        return value.isEmpty ? 'Team Name': null ;
+                      },
+                      controller: controller.nameController, hintText: 'Team Name',
+                    title: 'Team Name',
+                  ),
+                  Sized(height: 0.035,),
+                  CustomTextField(
+                    imagePath: personIcon,
                     validate: (value){
-                      return value.isEmpty ? 'Enter  Team Name': null ;
+                      return value.isEmpty ? 'Captain Name ': null ;
                     },
-                    controller: controller.nameController, hintText: 'Team Name',
-                  title: 'Team Name',
-                ),
-                Sized(height:0.03,),
-                CustomTextField(
-                  validate: (value){
-                    return value.isEmpty ? 'Enter  Leader Name': null ;
-                  },
-                  controller: controller.teamLeaderName, hintText: 'Team Leader Name',keyboardType: TextInputType.name,title: 'Team Leader Name',),
-                Sized(height:0.03,),
-                CustomTextField(
-                  validate: (value){
-                    return value.isEmpty ? 'Enter  Phone No': null ;
-                  },
-                  controller: controller.teamLeaderPhoneNumber, hintText: 'Phone No',keyboardType: TextInputType.number,title: 'Phone No',),
-                Sized(height:0.03,),
-                CustomTextField(
+                    controller: controller.teamLeaderName, hintText: 'Captain Name  ',keyboardType: TextInputType.name,title: 'Captain Name',),
+                  Sized(height: 0.035,),
+                  CustomTextField(
+                    imagePath: phoneIcon,
                     validate: (value){
-                      return value.isEmpty ? 'Enter  Location': null ;
+                      return value.isEmpty ? 'Phone Number': null ;
                     },
-                    controller: controller.teamLocation, hintText: 'Team location',title: 'Team location',),
-                Sized(height:0.03,),
-                Obx(() => controller.isLoading.value == true ? CustomIndicator() :CustomButton(title: 'Register Team', onTap: (){
-                  if(key.currentState!.validate()){
-                    if(controller.selectedImage.value != null && controller.selectedImage.value!.isNotEmpty){
-                      controller.addTeam(tournamentId: widget.tournamentId,userId: widget.userId,context: context);
-                      notificationServices.sendNotificationToSingleUser(widget.token, 'Hey There', 'A Team got register in your tournament');
+                    controller: controller.teamLeaderPhoneNumber, hintText: 'Phone Number',keyboardType: TextInputType.number,title: 'Phone Number',),
+                  Sized(height: 0.035,),
+                  CustomTextField(
+                      imagePath: addressIcon,
+                      validate: (value){
+                        return value.isEmpty ? 'Location': null ;
+                      },
+                      controller: controller.teamLocation, hintText: 'Location',title: 'Location',),
+                  Sized(height: 0.08,),
+                  Obx(() => controller.isLoading.value == true ? CustomIndicator() :CustomButton(title: 'Register', onTap: (){
+                    if(key.currentState!.validate()){
+                      if(controller.selectedImage.value != null && controller.selectedImage.value!.isNotEmpty){
+                        controller.addTeam(tournamentId: widget.tournamentId,userId: widget.userId,context: context);
+                        notificationServices.sendNotificationToSingleUser(widget.token, 'Hey There', 'A Team got register in your tournament');
+                      }else{
+                        ToastClass.showToastClass(context: context, message: 'Please Select your Team Icon');
+                      }
                     }else{
-                      ToastClass.showToastClass(context: context, message: 'Please Select your Team Icon');
+                      ToastClass.showToastClass(context: context, message: 'Please Fill all the Fields');
                     }
-                  }else{
-                    ToastClass.showToastClass(context: context, message: 'Please Fill all the Fields');
-                  }
-                }),)
-              ],
+                  }),),
+                  Sized(height: 0.2,),
+                ],
+              ),
             ),
           ),
         ),

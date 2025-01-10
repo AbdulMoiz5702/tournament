@@ -12,7 +12,7 @@ class CallButton extends StatefulWidget {
   const CallButton({
     required this.name,
     required this.id,
-    this.color = primaryTextColor
+    this.color = loginEnabledButtonColor
   });
 
   final String id ;

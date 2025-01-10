@@ -11,92 +11,97 @@ import '../reusbale_widget/custom_sizedBox.dart';
 import '../reusbale_widget/text_widgets.dart';
 import 'messages.dart';
 
+
 class UserStatusAppBar extends StatelessWidget {
   const UserStatusAppBar({
-    super.key,
+    Key? key,
     required this.widget,
-  });
+  }) : super(key: key);
 
   final MessageScreen widget;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      actions: [
-        CallButton(name: widget.receiverName, id: widget.receiverId),
-        Sized(width: 0.05),
-      ],
       title: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: primaryTextColor,
-            ),
-            padding: EdgeInsets.all(5),
-            child: Icon(
-              Icons.person,
-              color: whiteColor,
-            ),
-          ),
-          Sized(width: 0.05),
           Row(
             children: [
-              mediumText(title: widget.receiverName),
-              Sized(width: 0.02),
-              StreamBuilder<DocumentSnapshot>(
-                stream: fireStore
-                    .collection(usersCollection)
-                    .doc(widget.receiverId)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Center(child: Sized());
-                  } else {
-                    final userData = snapshot.data!.data() as Map<String, dynamic>;
-                    return userData['is_online'] == true
-                        ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        smallText(
-                            title: 'online',
-                            color: greenColor,
-                            fontSize: 10),
-                        Sized(width: 0.01),
-                        Icon(Icons.radio_button_checked_outlined,
-                            color: greenColor, size: 10)
-                      ],
-                    )
-                        : Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        smallText(title: 'offline', fontSize: 10),
-                        Sized(width: 0.01),
-                        Icon(Icons.trip_origin_outlined,
-                            color: secondaryTextColor, size: 10)
-                      ],
-                    );
-                  }
-                },
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blue,
+                ),
+                padding: const EdgeInsets.all(5),
+                child: const Icon(Icons.person, color: Colors.white),
               ),
+              const SizedBox(width: 8),
+              smallText(title :widget.receiverName,fontWeight: FontWeight.bold),
             ],
           ),
+          CallButton(name: widget.receiverName, id: widget.receiverId),
         ],
+      ),
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.transparent,
+            border: Border.all(color: Colors.blue),
+          ),
+          child: const Icon(Icons.arrow_back, color: Colors.white, size: 18),
+        ),
+      ),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: fireStore.collection(usersCollection).doc(widget.receiverId).snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData || snapshot.data == null) {
+              return const SizedBox.shrink();
+            }
+            final userData = snapshot.data!.data() as Map<String, dynamic>;
+            return Padding(
+              padding:  EdgeInsets.symmetric(vertical: 2,horizontal: MediaQuery.sizeOf(context).width  * 0.2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    userData['is_online'] == true ? 'Online' : 'Offline',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: userData['is_online'] == true ? Colors.green : Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Icon(
+                    userData['is_online'] == true
+                        ? Icons.radio_button_checked_outlined
+                        : Icons.radio_button_unchecked,
+                    color: userData['is_online'] == true ? Colors.green : Colors.grey,
+                    size: 12,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 }
 
-
 class EditDeleteAppbar extends StatelessWidget {
   const EditDeleteAppbar({
-    super.key,
+    Key? key,
     required this.controller,
-  });
+  }) : super(key: key);
 
   final ChatController controller;
 
@@ -104,29 +109,46 @@ class EditDeleteAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: GestureDetector(
-          onTap: (){
-            controller.isMessageSelected.value = false;
-            controller.resetIndex();
-            controller.selectedCMessageDocId.value = '';
-            controller.selectedChatDocId.value = '';
-          },
-          child: Icon(Icons.arrow_back)),
+        onTap: () {
+          controller.isMessageSelected.value = false;
+          controller.resetIndex();
+          controller.selectedCMessageDocId.value = '';
+          controller.selectedChatDocId.value = '';
+        },
+        child: Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.transparent,
+            border: Border.all(color: Colors.blue),
+          ),
+          child: const Icon(Icons.arrow_back, color: Colors.white, size: 18),
+        ),
+      ),
       actions: [
-        controller.messageType.value == 'text' ? GestureDetector(
-            onTap: (){
-              print('isEdit : ${controller.isEdit.value}');
-              print('EditMessageText : ${controller.editMessageText.value}');
+        if (controller.messageType.value == 'text')
+          GestureDetector(
+            onTap: () {
               controller.isEdit.value = true;
               controller.changeEditTextValue();
-            }, child: Icon(Icons.edit)) : Sized(height: 0,width: 0,),
-        Sized(width: 0.05,),
-        GestureDetector(
-            onTap: (){
-              controller.deleteMessage(chatDocId: controller.selectedChatDocId.value, docId: controller.selectedCMessageDocId.value);
             },
-            child: Icon(Icons.delete)),
-        Sized(width: 0.05,),
+            child: const Icon(Icons.edit, color: whiteColor),
+          ),
+        const SizedBox(width: 16),
+        GestureDetector(
+          onTap: () {
+            controller.deleteMessage(
+              chatDocId: controller.selectedChatDocId.value,
+              docId: controller.selectedCMessageDocId.value,
+            );
+          },
+          child: const Icon(Icons.delete, color: Colors.red),
+        ),
+        const SizedBox(width: 16),
       ],
     );
   }
 }
+
+

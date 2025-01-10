@@ -1,8 +1,3 @@
-
-
-
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -14,6 +9,7 @@ const String challengesCollection =  'challenges';
 const String challengesTeamCollection =  'Teams';
 const String chatsCollection =  'chats';
 const String messagesCollection =  'messages';
+const String vsTeamCollection =  'vs';
 const String status =  'status';
 FirebaseFirestore fireStore = FirebaseFirestore.instance;
 FirebaseStorage firebaseStorage = FirebaseStorage.instance;

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tournemnt/auth_screen/login_Screen.dart';
 import 'package:tournemnt/consts/colors.dart';
 import 'package:tournemnt/consts/images_path.dart';
@@ -19,7 +20,7 @@ import '../my_tournments/my_tournaments_screen/myTournamnets.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String userId;
-  ProfileScreen({required this.userId});
+  const ProfileScreen({super.key,required this.userId});
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
@@ -50,7 +51,9 @@ class ProfileScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Container(
-                    color: blueColor,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(image: AssetImage(bgImage),fit: BoxFit.cover),
+                    ),
                     height: MediaQuery.of(context).size.height * 0.24,
                     width: MediaQuery.of(context).size.width,
                   ),
@@ -77,7 +80,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         image: DecorationImage(
                           image: userData['imageLink'] == 'none'
-                              ? AssetImage('assets/images/team.png') as ImageProvider
+                              ? const AssetImage(profilePic) as ImageProvider
                               : NetworkImage(userData['imageLink'])
                                   as ImageProvider,
                           fit: BoxFit.contain,
@@ -90,150 +93,137 @@ class ProfileScreen extends StatelessWidget {
                     child: mediumText(
                         title: userData['name'],
                         context: context,
-                        color: primaryTextColor),
+                        color: blackColor,
+                        fontWeight: FontWeight.w500),
                   ),
                   Positioned(
                     top: MediaQuery.of(context).size.height * 0.31,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.phone,color: secondaryTextColor,size: 15,),
-                        Sized(width:0.02,),
-                        smallText(
-                            title: userData['phoneNumber'],
-                            context: context,),
-                      ],
-                    ),
+                    child: smallText(
+                        title: userData['phoneNumber'],
+                        fontSize: 10.0,fontWeight: FontWeight.w500,color: cardTextColor),
                   ),
                   Positioned(
                     top: MediaQuery.of(context).size.height * 0.34,
-                    child:  Row(
-                      children: [
-                      const   Icon(Icons.location_on,color: secondaryTextColor,size: 15,),
-                        Sized(width:0.02,),
-                        smallText(
-                            title: userData['location'].toString().toUpperCase(),
-                            context: context, ),
-                      ],
-                    ),
+                    child:  smallText(
+                        title: userData['location'].toString().toUpperCase(),fontSize: 10.0,fontWeight: FontWeight.w500,color: cardTextColor),
                   ),
                   Positioned(
                     top: MediaQuery.of(context).size.height * 0.37,
-                    child:  Container(
-                      padding: const EdgeInsets.all(7),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: secondaryWhiteColor,
-                      ),
-                      child: smallText(
-                        title: userData['myRole'].toString().toUpperCase(),
-                        context: context, color: blueColor,fontWeight: FontWeight.bold),
-                    ),
+                    child:  mediumText(
+                      fontSize: 14.0,
+                      title: userData['myRole'].toString().toUpperCase(),
+                      context: context, color: userRoleColor,fontWeight: FontWeight.bold),
                   ),
                 ],
               )),
-          body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                Column(
-                  children: List.generate(
-                      imageNames.length, (index){
-                    return GestureDetector(
-                      onTap: (){
-                        switch(index){
-                          case 0:
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => UpdateProfileScreen(
-                                    userId: userId,
-                                    userName: userData['name'],
-                                    email: userData['email'],
-                                    phone: userData['phoneNumber'],
-                                    location: userData['location'],
-                                    myRole: userData['myRole'],
-                                    imageLink: userData['imageLink'],
-                                  )));
-                            break;
-                          case 1:
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        MyTournamentsScreen(userId: userId)));
-                            break;
-                          case 2:
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        MyTournamentsTeams(userId: userId)));
-                            break;
-                          case 3:
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) => UserChallengesScreen(
-                                      userId: userId,
-                                    )));
-                            break;
-                          case 4:
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        UserAcceptedChallengesScreen(userId: userId)));
-                            break;
-                          case 5:
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>  ForgotScreen()));
-                            break;
-                          case 6:
-                            FirebaseAuth.instance.signOut().then((value) {
-                              Navigator.pushReplacement(
+          body: Container(
+            color: whiteColor,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  Container(
+                    color: whiteColor,
+                    child: Column(
+                      children: List.generate(
+                          imageNames.length, (index){
+                        return GestureDetector(
+                          onTap: (){
+                            switch(index){
+                              case 0:
+                                Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                      builder: (context) => LoginPage()));
-                              ToastClass.showToastClass(
-                                  context: context, message: 'Logout Successfully');
-                            });
-                            break;
-                          default:
-                            break;
+                                      builder: (context) => UpdateProfileScreen(
+                                        userId: userId,
+                                        userName: userData['name'],
+                                        email: userData['email'],
+                                        phone: userData['phoneNumber'],
+                                        location: userData['location'],
+                                        myRole: userData['myRole'],
+                                        imageLink: userData['imageLink'],
+                                      )));
+                                break;
+                              case 1:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            MyTournamentsScreen(userId: userId,isProfileScreen: true,)));
+                                break;
+                              case 2:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            MyTournamentsTeams(userId: userId,isProfileScreen: true,)));
+                                break;
+                              case 3:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) => UserChallengesScreen(
+                                          userId: userId,
+                                          isProfileScreen: true,
+                                        )));
+                                break;
+                              case 4:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            UserAcceptedChallengesScreen(userId: userId,isProfileScreen: true,)));
+                                break;
+                              case 5:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>  ForgotScreen()));
+                                break;
+                              case 6:
+                                FirebaseAuth.instance.signOut().then((value) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (context) => LoginPage()));
+                                  ToastClass.showToastClass(
+                                      context: context, message: 'Logout Successfully');
+                                });
+                                break;
+                              default:
+                                break;
 
-                        }
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        color: whiteColor,
-                        child:Container(
-                          padding: EdgeInsets.all(5),
-                          color: whiteColor,
-                          height: MediaQuery.sizeOf(context).height * 0.06,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(imagesList[index]),
-                                  Sized(width: 0.05,),
-                                  smallText(title:imageNames[index],context: context,color: isTrue[index] == true ?  redColor : secondaryTextColor,),
-                                ],
-                              ),
-                             const  Icon(Icons.arrow_forward_ios,color: secondaryTextFieldColor,size: 15,),
-                            ],
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              borderRadius: BorderRadius.circular(32),
+                              border: Border.all(color: detailsBoxBorderColor)
+                            ),
+                            padding: EdgeInsets.all(8),
+                            margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                            height: MediaQuery.sizeOf(context).height * 0.065,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(imagesList[index],color: buttonColor,),
+                                    Sized(width: 0.05,),
+                                 smallText(title: imageNames[index], fontSize: 14.0,fontWeight: FontWeight.w500,color:isTrue[index] == true ?  redColor : userProfileTextColor),
+                                  ],
+                                ),
+                                 Icon(Icons.arrow_forward_ios,color: cardTextColor.withOpacity(0.5),size: 15,),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ],
+                        );
+                      }),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

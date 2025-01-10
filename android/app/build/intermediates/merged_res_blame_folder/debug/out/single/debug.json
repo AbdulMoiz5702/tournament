@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.tournmentApp.tournemnt.app-merged_res-91:/drawable-v21_launch_background.xml.flat",
+        "source": "com.tournmentApp.tournemnt.app-main-93:/drawable-v21/launch_background.xml"
+    },
+    {
+        "merged": "com.tournmentApp.tournemnt.app-merged_res-91:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.tournmentApp.tournemnt.app-main-93:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.tournmentApp.tournemnt.app-merged_res-91:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.tournmentApp.tournemnt.app-main-93:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.tournmentApp.tournemnt.app-merged_res-91:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.tournmentApp.tournemnt.app-main-93:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.tournmentApp.tournemnt.app-merged_res-91:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.tournmentApp.tournemnt.app-main-93:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.tournmentApp.tournemnt.app-merged_res-91:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.tournmentApp.tournemnt.app-main-93:/mipmap-xxhdpi/ic_launcher.png"
+    }
+]

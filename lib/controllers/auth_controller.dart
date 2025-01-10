@@ -15,9 +15,8 @@ class AuthController extends GetxController {
   List<String> roles = [
     'Bowler',
     'Batsman',
-    'Opener',
-    'Fast Bowler',
-    'Hitter',
+    'All Rounder',
+    'Wicket Keeper'
   ];
 
   var emailController = TextEditingController();
@@ -28,6 +27,13 @@ class AuthController extends GetxController {
   var confirmPassword = TextEditingController();
   var  myRole = ''.obs;
   var isLoading = false.obs;
+  var isCheck = false.obs;
+  var currentIndex =(-1).obs;
+
+  changeIndex(index,name){
+    currentIndex.value = index;
+    myRole.value = name;
+  }
 
   @override
   void dispose() {
@@ -76,8 +82,8 @@ class AuthController extends GetxController {
           isOnline: false,
           imageLink: 'none',
         );
-        await fireStore.collection(usersCollection).doc(user.uid).set(newUser.toMap());
         Get.offAll(()=> BottomScreen(userId: newUser.userId));
+        await fireStore.collection(usersCollection).doc(user.uid).set(newUser.toMap());
         callController.startCall(userId: user.uid, userName: nameController.text.toString(), context: context);
       }
       isLoading(false);

@@ -1,14 +1,5 @@
 
-
- const String appLogo= 'assets/images/logo.png';
  const String splashScreen= 'assets/images/splash.jpg';
- const String editProfile= 'assets/images/editProfile.png';
- const String myTournaments= 'assets/images/tournaments.png';
- const String myMatches= 'assets/images/matches.png';
- const String myChallenges= 'assets/images/challenges.png';
- const String myAcceptedChallenges= 'assets/images/exceptedChallenges.png';
- const String resetPassword= 'assets/images/resetPassword.png';
- const String logout= 'assets/images/logout.png';
  const String send= 'assets/images/send.png';
  const String image= 'assets/images/image.png';
  const String voice= 'assets/images/voice.png';
@@ -18,21 +9,51 @@
  const String bowiling= 'assets/images/bowiling.png';
  const String fielding= 'assets/images/fielding.png';
  const String keepring= 'assets/images/keepring.png';
- const String call= 'assets/images/call.png';
+ const String maskGroup= 'assets/images/mask_group.png';
+const String profilePic= 'assets/images/camera.png';
+ const String splashImage= 'assets/images/splah_image.png';
+
 
  // loading gif
  const String loadingGif= 'assets/images/cricket.gif';
  const String recordingGif= 'assets/images/recording.gif';
  const String soundWave= 'assets/images/wave.gif';
+ const String vs= 'assets/images/vs.gif';
+
+ // bg image
+ const String bgImage= 'assets/images/bg_image.jpg';
+
+ // svg images
+ const String emailIcon= 'assets/svg_images/email.svg';
+ const String passwordIcon= 'assets/svg_images/password.svg';
+ const String phoneIcon= 'assets/svg_images/phone.svg';
+ const String personIcon= 'assets/svg_images/person.svg';
+ const String addressIcon= 'assets/svg_images/address.svg';
+ const String chatIcon= 'assets/svg_images/chat_bubble.svg';
+ const String arrowIcon= 'assets/svg_images/arrow.svg';
+ const String dateIcon= 'assets/svg_images/date.svg';
+ const String timeIcon= 'assets/svg_images/time.svg';
+ const String myTournamentsIcon= 'assets/svg_images/tournaments.svg';
+ const String myMatchesIcon= 'assets/svg_images/matches.svg';
+const String locationIcon= 'assets/svg_images/location.svg';
+
+ // bottom screen
+ const String home= 'assets/svg_images/Homeblue.svg';
+ const String match= 'assets/svg_images/Ball.svg';
+ const String profile= 'assets/svg_images/Profile.svg';
+ const String challenge= 'assets/svg_images/Challenge.svg';
+ // match types
+ const String areaLevel= 'assets/svg_images/area_level.svg';
+ const String ageLevel= 'assets/svg_images/age_level.svg';
 
  List<String> imagesList = [
-  editProfile,
-  myTournaments,
-  myMatches,
-  myChallenges,
-  myAcceptedChallenges,
-  resetPassword,
-  logout,
+  personIcon,
+  myTournamentsIcon,
+  challenge,
+  addressIcon,
+  passwordIcon,
+  passwordIcon,
+  passwordIcon,
  ];
 
  List<String> imageNames = [
@@ -71,3 +92,58 @@
   'All Rounders',
   'Wicket Keeping',
  ];
+
+ final List<String> tournamentTypes = [
+  'Single Wicket',
+  'Double Wicket',
+  'Super Six',
+  'Open Tournament',
+  'Under 22 Tournament',
+ ];
+
+ final List<String> areaLevels = [
+  'Local',
+  'District',
+  'State',
+  'National',
+ ];
+
+ final List<String> bottomIcon = [
+  home,
+  challenge,
+  match,
+  profile,
+ ];
+
+ final List<String> bottomTitle = [
+  'Home',
+  'Challenge',
+  'My Match',
+  'Profile',
+ ];
+
+final List<String> overTypeList = [
+ 'Single Wicket',
+ 'Double Wicket',
+ 'Super Six',
+];
+
+final List<String> ageLevelList = [
+ 'Under 19',
+ 'Under 22',
+ 'Other',
+];
+
+
+final List<String> areaLevelList = [
+ 'Open Tournament',
+ 'District Level',
+ 'Other',
+];
+
+ final List<String> areaLevelListChallenge = [
+  'Open Challenge',
+  'District Level',
+  'Other',
+ ];
+

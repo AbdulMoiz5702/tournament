@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:tournemnt/auth_screen/forgot_password-screen.dart';
-import 'package:tournemnt/auth_screen/signpScreen.dart';
+import 'package:tournemnt/auth_screen/role_selection_screen.dart';
 import 'package:tournemnt/consts/images_path.dart';
+import 'package:tournemnt/reusbale_widget/bg_widgets.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
@@ -19,96 +20,152 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var authController = Get.put(AuthController());
     final  key = GlobalKey<FormState>();
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: key,
+    return BgWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor:transparentColor ,
+        ),
+        backgroundColor: transparentColor,
+        body: Align(
+          alignment: Alignment.bottomCenter,
+          child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Sized(height: 0.04,),
-                Image.asset(appLogo,height: MediaQuery.sizeOf(context).height * 0.2,alignment: Alignment.center,),
-                Sized(
-                  height: 0.03,
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width *0.08),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      largeText(title: 'Go ahead and set up',color: whiteColor),
+                      largeText(title: 'your account',color: whiteColor),
+                      Sized(height: 0.005,),
+                      smallText(title: 'Sign in-up to enjoy the best managing experience',color: secondaryTextColor,fontWeight: FontWeight.w500),
+                      Sized(height: 0.05,),
+                    ],
+                  ),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                    child: largeText(title: 'Let\'s you Login',context: context)),
-                Sized(
-                  height: 0.001,
-                ),
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: smallText(title: 'Enter your email and password.',context: context)),
-                Sized(
-                  height: 0.015,
-                ),
-                CustomTextField(
-                  validate: (value) {
-                    return value.isEmpty ? 'Enter Email': null ;
-                  },
-                  controller: authController.emailController,
-                  hintText: 'Email',
-                  title: 'Email',
-                ),
-                Sized(
-                  height: 0.02,
-                ),
-                CustomTextField(
-                  validate: (value) {
-                    return value.isEmpty ? 'Enter password': null ;
-                  },
-                  controller: authController.passwordController,
-                  hintText: 'Password',
-                  title: 'Password',
-                ),
-                Sized(
-                  height: 0.03,
-                ),
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => ForgotScreen()));
-                        },
-                        child: smallText(
-                            title: 'Forgot Password ?',
-                            context: context,
-                            fontSize: 12,
-                            color: blueColor))),
-                Sized(
-                  height: 0.03,
-                ),
-                Obx(() =>authController.isLoading.value == true ? const CustomIndicator(): CustomButton(
-                    title: 'Login',
-                    onTap: () {
-                      if(key.currentState!.validate()){
-                        authController.signInWithEmailPassword(context);
-                      }
-                    }),),
-                Sized(
-                  height: 0.2,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    smallText(
-                      title: 'Don\'t have an account ? ',
-                      context: context,
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+                  height: MediaQuery.sizeOf(context).height * 0.68,
+                  width: MediaQuery.sizeOf(context).width * 1,
+                  decoration:  BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(40),
+                        topLeft: Radius.circular(40),
+                      )),
+                  child: Form(
+                    key: key,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          height: MediaQuery.sizeOf(context).height * 0.065,
+                          width: MediaQuery.sizeOf(context).width * 1,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: loginRegisterBarColor,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: MediaQuery.sizeOf(context).width * 0.45,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: loginRegisterButtonBorderColor),
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: whiteColor,
+                                ),
+                                child: mediumText(title: 'Login',fontSize: 14,fontWeight: FontWeight.w600),
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                  Get.offAll(()=> RoleSelectionScreen());
+                                },
+                                child: Container(
+                                  width: MediaQuery.sizeOf(context).width * 0.4,
+                                  alignment: Alignment.center,
+                                  child: mediumText(title: 'Register',fontSize: 14,fontWeight: FontWeight.w500,color: loginDisableButtonColor),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Sized(
+                          height: 0.07,
+                        ),
+                        CustomTextField(
+                          imagePath: emailIcon,
+                          validate: (value) {
+                            return value.isEmpty ? 'Enter Email': null ;
+                          },
+                          controller: authController.emailController,
+                          hintText: 'E-mail ID',
+                          title: 'Email',
+                        ),
+                        Sized(
+                          height: 0.03,
+                        ),
+                        CustomTextField(
+                          imagePath: passwordIcon,
+                          validate: (value) {
+                            return value.isEmpty ? 'Enter password': null ;
+                          },
+                          controller: authController.passwordController,
+                          hintText: 'Password',
+                          title: 'Password',
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Obx(
+                                      ()=> Checkbox(
+                                        activeColor: forgotPasswordColor,
+                                      side: BorderSide(color: forgotPasswordColor),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      value: authController.isCheck.value, onChanged: (newValue){
+                                    authController.isCheck.value = newValue!;
+                                  }),
+                                ),
+            
+                                smallText(title: 'Remember me',color: loginDisableButtonColor,fontWeight: FontWeight.w600),
+                              ],
+                            ),
+                            GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (context) => ForgotScreen()));
+                                },
+                                child: smallText(
+                                    title: 'Forgot Password?',
+                                    context: context,
+                                    fontWeight: FontWeight.w600,
+                                    color: forgotPasswordColor)),
+                          ],
+                        ),
+                        Sized(
+                          height: 0.03,
+                        ),
+                        Obx(() =>authController.isLoading.value == true ? const CustomIndicator(): CustomButton(
+                            title: 'Login',
+                            onTap: () {
+                              if(key.currentState!.validate()){
+                                authController.signInWithEmailPassword(context);
+                              }
+                            }),),
+                      ],
                     ),
-                    InkWell(
-                        onTap: () {
-                         Get.to(()=> SignupScreen());
-                        },
-                        child: smallText(
-                            title: 'Create an account', fontSize: 16, context: context,color: blueColor)),
-                  ],
+                  ),
                 ),
               ],
             ),

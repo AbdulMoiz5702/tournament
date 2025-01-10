@@ -19,27 +19,27 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       initialValue: initialValue,
-      style: const TextStyle(color: whiteColor,fontSize: 14),
+      style: const TextStyle(color: secondaryTextColor, fontWeight: FontWeight.bold,fontSize: 14),
       decoration: InputDecoration(
-        isDense: true,
         labelText: labelText,
-        labelStyle: const TextStyle(color: buttonColors,fontWeight: FontWeight.bold),
-        hintStyle: const TextStyle(color: whiteColor),
+        labelStyle: const TextStyle(color: loginDisableButtonColor,fontWeight: FontWeight.w500,fontSize: 14),
+        isDense: true,
+        hintStyle: const TextStyle(color: loginDisableButtonColor),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: iconColor, width: 1),
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: loginRegisterButtonBorderColor, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: buttonColors, width: 2),
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: loginRegisterButtonBorderColor, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(30),
           borderSide: const BorderSide(color: redColor, width: 2),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: iconColor, width: 1),
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: loginRegisterButtonBorderColor, width: 1),
         ),
       ),
       onSaved: onSaved,

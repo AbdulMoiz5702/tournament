@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:tournemnt/consts/colors.dart';
-import 'package:tournemnt/controllers/call_controller.dart';
+import 'package:tournemnt/consts/images_path.dart';
+import 'package:tournemnt/reusbale_widget/bg_widgets.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import 'package:tournemnt/reusbale_widget/toast_class.dart';
-
 import '../controllers/add_challenges_controller.dart';
+import '../reusbale_widget/customLeading.dart';
+import 'challenge-type_selection.dart';
 
 class AddChallengeScreen extends StatelessWidget {
   final String userId;
@@ -20,97 +21,161 @@ class AddChallengeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final key = GlobalKey<FormState>();
     var controller = Get.put(AddChallengesController());
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: largeText(title: 'Add Challenge',context: context),
-      ),
-      body: Padding(
-        padding:const  EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: key,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Sized(height: 0.03,),
-                Obx(
-                  ()=> Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: secondaryWhiteColor,
-                      borderRadius: BorderRadius.circular(10),
-                      image: controller.selectedImage.value != null
-                          ? DecorationImage(image: AssetImage(controller.selectedImage.value!))
-                          : null,
-                    ),
-                    height: MediaQuery.sizeOf(context).height * 0.16,
-                    width: MediaQuery.sizeOf(context).width * 0.3,
-                    child:  IconButton(onPressed: (){
-                      controller.selectImage(context);
-                    }, icon: Icon(Icons.camera_alt_outlined,color:blueColor,),),
+    return BgWidget(
+      child: Scaffold(
+        backgroundColor: transparentColor,
+        appBar: AppBar(
+          leading: CustomLeading(),
+          bottom: PreferredSize(
+            preferredSize: Size(double.infinity, 55),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.sizeOf(context).width * 0.1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Sized(height: 0.005),
+                      largeText(
+                        title: 'Add Challenge',
+                        context: context,
+                        fontWeight: FontWeight.w500,
+                        color: whiteColor,
+                      ),
+                      Sized(height: 0.005),
+                      smallText(
+                        title: 'Enter Your Valid Information .',
+                        color: secondaryTextColor.withOpacity(0.85),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      Sized(height: 0.005),
+                    ],
                   ),
-                ),
-                Sized(height: 0.03,),
-                CustomTextField(controller: controller.teamName, hintText: 'Team Name',validate: (value){
-                  return value.isEmpty ? 'Enter  Team Name': null ;
-                },title: 'Team Name',),
-                Sized(height: 0.03,),
-                CustomTextField(validate: (value){
-                  return value.isEmpty ? 'Enter  Challenger Name': null ;
-                },controller: controller.captainName, hintText: 'Challenger Name',title: 'Challenger Name',),
-                Sized(height: 0.03,),
-                CustomTextField(
-                  validate: (value){
-                    return value.isEmpty ? 'Enter Phone No': null ;
-                  },
-                  controller: controller.leaderPhone, hintText: 'Phone No',keyboardType: TextInputType.number,title: 'Phone No',),
-                Sized(height: 0.03,),
-                CustomTextField(
-                  validate: (value){
-                    return value.isEmpty ? 'Enter Address': null ;
-                  },
-                  controller: controller.location, hintText: 'Address',keyboardType: TextInputType.streetAddress,title: 'Address',),
-                Sized(height: 0.03,),
-                CustomTextField(
-                  validate: (value){
-                    return value.isEmpty ? 'Enter Overs': null ;
-
-                  },
-                  controller: controller.matchOvers, hintText: 'Overs',keyboardType: TextInputType.number,title: 'Overs',),
-                Sized(height: 0.03,),
-                GestureDetector(
-                  onTap: () {
-                    controller.selectDate(context);
-                  },
-                  child: AbsorbPointer(
-                    child: CustomTextField(
-                      validate: (value){
-                        return value.isEmpty ? 'Enter Start Date': null ;
-
-                      },
-                      controller: controller.startDateController,
-                      hintText: 'Date',
-                      title: 'Date',
+                ],
+              ),
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            color: whiteColor,
+            child: Form(
+              key: key,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Sized(height: 0.03,),
+                  Obx(
+                        ()=> Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: cardTextColor,
+                        shape: BoxShape.circle,
+                        image: controller.selectedImage.value != null
+                            ? DecorationImage(image: AssetImage(controller.selectedImage.value!))
+                            : null,
+                      ),
+                      height: MediaQuery.sizeOf(context).height * 0.16,
+                      width: MediaQuery.sizeOf(context).width * 0.3,
+                      child:   IconButton(onPressed: (){
+                        controller.selectImage(context);
+                      }, icon: const Icon(Icons.camera_alt_outlined,color:cardMyTournament,),),
                     ),
                   ),
-                ),
-                Sized(height: 0.05,),
-               Obx(()=>  controller.isLoading.value == true ? const Center(child: CustomIndicator()):CustomButton(
-                 onTap: () {
-                   if(key.currentState!.validate()){
-                     if(controller.selectedImage.value != null && controller.selectedImage.value!.isNotEmpty){
-                       controller.addChallenge(context:context);
+                  Sized(height: 0.03,),
+                  CustomTextField(
+                    imagePath: personIcon,
+                    controller: controller.teamName, hintText: 'Team Name',validate: (value){
+                    return value.isEmpty ? 'Enter  Team Name': null ;
+                  },title: 'Team Name',),
+                  Sized(height: 0.03,),
+                  CustomTextField(
+                    imagePath: personIcon,
+                    validate: (value){
+                    return value.isEmpty ? 'Enter  Captain Name': null ;
+                  },controller: controller.captainName, hintText: 'Captain Name',title: 'Captain Name',),
+                  Sized(height: 0.03,),
+                  CustomTextField(
+                    onTap: (){
+                      Get.to(()=> ChallengeTypeSelection());
+                    },
+                    imagePath: personIcon,
+                    validate: (value){
+                      return value.isEmpty ? 'Enter Challenges Type': null ;
+                    },
+                    controller: controller.challengeType, hintText: 'Challenges Type',keyboardType: TextInputType.number,title: 'Challenges Type',),
+                  Sized(height: 0.03,),
+                  CustomTextField(
+                    imagePath: phoneIcon,
+                    validate: (value){
+                      return value.isEmpty ? 'Enter Phone Number ': null ;
+                    },
+                    controller: controller.leaderPhone, hintText: 'Phone Number ',keyboardType: TextInputType.number,title: 'Phone Number ',),
+                  Sized(height: 0.03,),
+                  CustomTextField(
+                    imagePath: addressIcon,
+                    validate: (value){
+                      return value.isEmpty ? 'Enter Location': null ;
+                    },
+                    controller: controller.location, hintText: 'Location',keyboardType: TextInputType.streetAddress,title: 'Location',),
+                  Sized(height: 0.03,),
+                  GestureDetector(
+                    onTap: () {
+                      controller.selectDate(context);
+                    },
+                    child: AbsorbPointer(
+                      child: CustomTextField(
+                        imagePath: dateIcon,
+                        validate: (value){
+                          return value.isEmpty ? 'Enter Start Date': null ;
+
+                        },
+                        controller: controller.startDateController,
+                        hintText: 'Date',
+                        title: 'Date',
+                      ),
+                    ),
+                  ),
+                  Sized(height: 0.03),
+                  GestureDetector(
+                    onTap: () {
+                      controller.selectTime(context);
+                    },
+                    child: AbsorbPointer(
+                      child: CustomTextField(
+                        imagePath: timeIcon,
+                        validate: (value){
+                          return value.isEmpty ? 'Enter Match time ': null ;
+                        },
+                        controller: controller.startDateTimeController,
+                        hintText: 'Time ',
+                        title: 'Time ',
+                      ),
+                    ),
+                  ),
+                  Sized(height: 0.05,),
+                  Obx(()=>  controller.isLoading.value == true ? const Center(child: CustomIndicator()):CustomButton(
+                   onTap: () {
+                     if(key.currentState!.validate()){
+                       if(controller.selectedImage.value != null && controller.selectedImage.value!.isNotEmpty){
+                         controller.addChallenge(context:context);
+                       }else{
+                         ToastClass.showToastClass(context: context, message: 'Please Select your Challenger Icon');
+                       }
                      }else{
-                       ToastClass.showToastClass(context: context, message: 'Please Select your Challenger Icon');
+                       ToastClass.showToastClass(context: context, message: 'Please Fill all the Fields');
                      }
-                   }else{
-                     ToastClass.showToastClass(context: context, message: 'Please Fill all the Fields');
-                   }
-                 } ,
-                 title: 'Add Challenge',
-               ),),
-              ],
+                   } ,
+                   title: 'Add Challenge',
+                 ),),
+                  Sized(height: 0.05,),
+                ],
+              ),
             ),
           ),
         ),

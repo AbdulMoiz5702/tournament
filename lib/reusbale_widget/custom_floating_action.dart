@@ -10,12 +10,12 @@ class CustomFloatingAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(onPressed:onTap ,
-    backgroundColor: blueColor,
+    backgroundColor: floatingActionButtonColor,
     elevation: 10,
     splashColor: iconColor,
     highlightElevation:10,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(50),
     ),
     child: const Center(child:Icon(Icons.add,color: whiteColor,size: 35,),),);
   }

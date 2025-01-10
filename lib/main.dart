@@ -8,30 +8,25 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'Splash_screen.dart';
 
-var navigatorKey = GlobalKey<NavigatorState>();
 
+var navigatorKey = GlobalKey<NavigatorState>();
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessageBackgroundHandler);
-  /// 1.1.2: set navigator key to ZegoUIKitPrebuiltCallInvitationService
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
-  // call the useSystemCallingUI
-  ZegoUIKit().initLog().then((value) {
-    ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
-      [ZegoUIKitSignalingPlugin()],
-    );
-
+  ZegoUIKit().initLog().then((value) {ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI([ZegoUIKitSignalingPlugin()],);
     runApp(MyApp(navigatorKey: navigatorKey));
   });
-
 }
+
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessageBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
+
 
 class MyApp extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
@@ -43,11 +38,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: whiteColor,
+        scaffoldBackgroundColor: transparentColor,
         appBarTheme:const AppBarTheme(
           centerTitle: true,
-          color: whiteColor,
+          color: transparentColor,
         ),
       ),
       home: SplashScreen(),

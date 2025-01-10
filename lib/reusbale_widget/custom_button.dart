@@ -9,30 +9,24 @@ class CustomButton extends StatelessWidget {
   final double height ;
   final double width ;
   final Color color ;
-  const CustomButton({required this.title,required this.onTap,this.height = 0.05,this.width = 0.5,this.color = blueColor});
+  final double fontSize;
+  final FontWeight fontWeight ;
+  const CustomButton({required this.title,required this.onTap,this.height = 0.06,this.width = 1,this.color = buttonColor,this.fontSize = 16.0,this.fontWeight = FontWeight.w700});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(30),
       child: Container(
         alignment: Alignment.center,
         height: MediaQuery.sizeOf(context).height *height ,
         width: MediaQuery.sizeOf(context).width * width,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(30),
           color: color,
-          gradient: LinearGradient(
-            colors: [
-              color.withOpacity(0.9), // Slightly darker at the start
-              color.withOpacity(0.7),
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
         ),
-        child: mediumText(title: title,context: context,fontSize: 15,color: whiteColor),
+        child: mediumText(title: title,context: context,fontSize: fontSize.toDouble(),color: whiteColor,fontWeight:fontWeight ),
       ),
     );
   }

@@ -2,23 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:tournemnt/consts/colors.dart';
 
 
+
 class CustomLeading extends StatelessWidget {
   const CustomLeading({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
+    return GestureDetector(
       onTap: (){
         Navigator.pop(context);
       },
       child: Container(
-        margin: EdgeInsets.all(6),
-        padding: EdgeInsets.all(3),
-        decoration:const  BoxDecoration(
-          shape: BoxShape.circle,
-          color: listTileColor,
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color:transparentColor,
+            border: Border.all(color: buttonColor)
         ),
-        child: Center(child: Icon(Icons.arrow_back_ios,color: iconColor,))
+        child: Icon(Icons.arrow_back,color: whiteColor,size: 18,),
       ),
     );
   }

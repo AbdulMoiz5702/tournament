@@ -2,7 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tournemnt/consts/firebase_consts.dart';
+import 'package:tournemnt/consts/images_path.dart';
+import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
+import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
+import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 
+import '../consts/colors.dart';
 import '../reusbale_widget/toast_class.dart';
 
 class UserChallengesController extends GetxController {
@@ -62,32 +67,31 @@ class UserChallengesController extends GetxController {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Challenge'),
+          backgroundColor: whiteColor,
+          title: mediumText(title: 'Edit Challenge'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                    controller: teamNameController,
-                    decoration: InputDecoration(labelText: 'Team Name')),
-                TextField(
-                    controller: leaderNameController,
-                    decoration: InputDecoration(labelText: 'Leader Name')),
-                TextField(
-                    controller: leaderPhoneController,
-                    decoration: InputDecoration(labelText: 'Leader Phone')),
-                TextField(
-                    controller: locationController,
-                    decoration: InputDecoration(labelText: 'Location')),
+                Sized(height: 0.03,),
+                CustomTextField(controller: teamNameController, hintText: 'Team Name', validate: (v){},imagePath: personIcon,),
+                Sized(height: 0.03,),
+                CustomTextField(controller: leaderNameController, hintText: 'Captain Name', validate: (v){},imagePath: personIcon,),
+                Sized(height: 0.03,),
+                CustomTextField(controller: leaderPhoneController, hintText: 'Captain Phone', validate: (v){},imagePath: phoneIcon,),
+                Sized(height: 0.03,),
+                CustomTextField(controller: locationController, hintText: 'Address', validate: (v){},imagePath: addressIcon,),
               ],
             ),
           ),
           actions: [
             TextButton(
+              style: ButtonStyle(foregroundColor: MaterialStateProperty.all(tCardBgColor)),
               onPressed: () => Navigator.of(context).pop(),
               child: Text('Cancel'),
             ),
             TextButton(
+              style: ButtonStyle(foregroundColor: MaterialStateProperty.all(tCardBgColor)),
               onPressed: () {
                 updateChallenge(context: context, challengeId: challengeId, newTeamName: teamNameController.text, newLeaderName: leaderNameController.text, newLeaderPhoneNumber: leaderPhoneController.text, newLocation:  locationController.text,);
                 Navigator.of(context).pop();

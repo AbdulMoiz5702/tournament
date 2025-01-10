@@ -39,11 +39,11 @@ class VoiceMessgaeWidget extends StatelessWidget {
           padding: EdgeInsets.only(top: 5),
           decoration: BoxDecoration(
             boxShadow: controller.currentIndex.value == index ? controller.isMessageSelected.value ==  true ? [
-              BoxShadow(color: primaryTextColor,blurRadius: 5,spreadRadius: 7),
+              BoxShadow(color: cardPartColor,blurRadius: 5,spreadRadius: 7),
             ]: [] :  [],
             color: isCurrentUser
-                ? primaryTextColor
-                : roleBoxColor,
+                ? cardTextColor
+                : cardMyTournament,
             borderRadius: BorderRadius.only(
               topRight: isCurrentUser
                   ? Radius.circular(0)
@@ -59,8 +59,8 @@ class VoiceMessgaeWidget extends StatelessWidget {
           child: VoiceMessagePlayer(
             activeSliderColor: whiteColor,
             backgroundColor: isCurrentUser
-                ? primaryTextColor
-                : roleBoxColor,
+                ? cardTextColor
+                : cardMyTournament,
             controller: VoiceController(
               noiseCount: 40,
               audioSrc: messageData['voice_message'],

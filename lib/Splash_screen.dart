@@ -6,6 +6,7 @@ import 'package:tournemnt/auth_screen/login_Screen.dart';
 import 'package:tournemnt/consts/colors.dart';
 import 'package:tournemnt/controllers/splash_controller.dart';
 import 'consts/firebase_consts.dart';
+import 'consts/images_path.dart';
 import 'controllers/call_controller.dart';
 import 'controllers/set_status_controller.dart';
 
@@ -44,9 +45,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blueColor,
+      backgroundColor: blackColor,
       body: Center(
-        child: Image.asset('assets/images/splash.jpg',fit: BoxFit.cover,),
+        child: Container(
+          height: MediaQuery.sizeOf(context).height * 0.2,
+          width: MediaQuery.sizeOf(context).width * 0.4,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image: const DecorationImage(image: AssetImage(splashImage),fit: BoxFit.cover,isAntiAlias: true)
+          ),
+        ),
       ),
     );
   }
