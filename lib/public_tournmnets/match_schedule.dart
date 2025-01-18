@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:tournemnt/reusbale_widget/bg_widgets.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
 import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
+import 'package:tournemnt/services/notification_sevices.dart';
 import '../consts/colors.dart';
 import '../consts/images_path.dart';
 import '../controllers/my_tournamnets_teams.dart';
@@ -27,6 +29,7 @@ class MatchSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(MyTournamentsTeamsController());
+    NotificationServices notificationServices = NotificationServices();
     return BgWidget(
       child: Scaffold(
           backgroundColor: transparentColor,
@@ -135,7 +138,27 @@ class MatchSchedule extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Obx(()=> controller.isLoading.value == true ? CustomIndicator() : CustomButton(title: 'Confirm', onTap: (){
+                    // Parse and format date and time
+                    DateTime selectedDate = DateFormat('yyyy-MM-dd').parse(controller.startDateController.text);
+                    String formattedDate = DateFormat('dd MMM yyyy').format(selectedDate);
+                    TimeOfDay selectedTime = TimeOfDay(
+                      hour: int.parse(controller.startDateTimeController.text.split(':')[0]),
+                      minute: int.parse(controller.startDateTimeController.text.split(':')[1].split(' ')[0]),
+                    );
+                    String formattedTime = selectedTime.format(context);
                     controller.makeSchedule(tournamentId: tournamentId, teamOne: teamOneName, teamTwo: teamTwoName, teamTwoId: teamTwoId, teamOneId: teamOneId,teamOneToken: teamOneToken,teamTwoToken:teamTwoToken,context: context);
+                    // Send notifications with date and time
+                    notificationServices.sendNotificationToSingleUser(
+                        teamOneToken,
+                        'Match Scheduled!',
+                        'Hi ${teamOneName}!\n🎉 Your match against ${teamTwoName} is scheduled for $formattedDate at $formattedTime. Get ready! 🏏'
+                    );
+
+                    notificationServices.sendNotificationToSingleUser(
+                        teamTwoToken,
+                        'Match Scheduled!',
+                        'Hi ${teamTwoName}!\n🎉 Your match against ${teamOneName} is scheduled for $formattedDate at $formattedTime. Prepare for the game! 🏆'
+                    );
                   })),
                 ),
                 Sized(height: 0.3),

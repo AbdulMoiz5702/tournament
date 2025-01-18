@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tournemnt/consts/firebase_consts.dart';
 import '../BottomScreen.dart';
 import '../models/user_model.dart';
+import '../reusbale_widget/toast_class.dart';
 import '../services/notification_sevices.dart';
 import 'call_controller.dart';
 
@@ -127,6 +129,20 @@ class AuthController extends GetxController {
     } catch (error) {
       isLoading(false);
        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error signing in with email and password')),);
+    }
+  }
+
+  forgotPassword({required BuildContext context}) async {
+    try{
+      isLoading(true);
+      await auth.sendPasswordResetEmail(email: emailController.text.toString()).then((value){
+        ToastClass.showToastClass(context: context, message: "Recovery email is sent. Please check your mail");
+        isLoading(false);
+      });
+      isLoading(false);
+    }catch(e){
+      isLoading(false);
+      ToastClass.showToastClass(context: context, message: "Something went wrong Error : $e");
     }
   }
 

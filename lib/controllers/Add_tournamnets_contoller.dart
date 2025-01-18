@@ -211,7 +211,7 @@ class AddTournamentsController extends GetxController {
         'imagePath':selectedImage.toString(),
         'token':userToken,
         'rules':tournamentsRules.text.trim(),
-        'startTime':selectedTime.toString(),
+        'startTime':selectedTime.value.toString(),
         'totalPlayers':int.parse(totalPlayerController.text.toString()),
       }).then((value) => {
         isLoading(false),

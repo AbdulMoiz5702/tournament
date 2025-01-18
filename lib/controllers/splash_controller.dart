@@ -14,7 +14,6 @@ class SplashController extends GetxController {
   Future<void> initialize(context) async {
     await notificationServices.requestNotificationPermission();
     await notificationServices.firebaseInit(context);
-
     try {
       String? token = await notificationServices.getDeviceToken();
       if (token != null) {

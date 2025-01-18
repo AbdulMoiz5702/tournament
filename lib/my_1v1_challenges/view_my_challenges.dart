@@ -11,6 +11,7 @@ import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import '../chat_screens/messages.dart';
 import '../consts/colors.dart';
+import '../consts/images_path.dart';
 import '../controllers/View_My_Challenges_controller.dart';
 import '../reusbale_widget/accepter_card.dart';
 import '../reusbale_widget/customLeading.dart';
@@ -88,7 +89,9 @@ class ViewMyChallenges extends StatelessWidget {
                     onTap: () {},
                   ),
                   Sized(height: 0.02,),
-                  mediumText(title: 'VS',context: context),
+                  Transform.rotate(
+                      angle: 110,
+                      child: Image.asset(vs,height: MediaQuery.sizeOf(context).height * 0.1,)),
                   Sized(height: 0.02,),
                   StreamBuilder(
                     stream: FirebaseFirestore.instance.collection(challengesCollection).doc(challengeId).collection(challengesTeamCollection).snapshots(),

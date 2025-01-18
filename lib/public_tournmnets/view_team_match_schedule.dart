@@ -13,7 +13,9 @@ import '../reusbale_widget/text_widgets.dart';
 
 class ViewTeamMatchSchedule extends StatelessWidget {
   final String tournamentId;
-  const ViewTeamMatchSchedule({super.key, required this.tournamentId});
+  final String teamOne;
+  final String teamTWo ;
+  const ViewTeamMatchSchedule({super.key, required this.tournamentId,required this.teamOne,required this.teamTWo});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,7 @@ class ViewTeamMatchSchedule extends StatelessWidget {
       child: Scaffold(
         backgroundColor: transparentColor,
         appBar: AppBar(
-          leading: CustomLeading(),
+          leading: const CustomLeading(),
           bottom: PreferredSize(
             preferredSize: const Size(double.infinity, 55),
             child: Padding(
@@ -107,7 +109,7 @@ class ViewTeamMatchSchedule extends StatelessWidget {
                   ),
                 );
               } else if (snapshot.data!.docs.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text('No match schedule available'),
                 );
               } else {
@@ -117,10 +119,8 @@ class ViewTeamMatchSchedule extends StatelessWidget {
                     var data = snapshot.data!.docs[index];
                     DateTime date = DateTime.parse(data['date']);
                     String formattedDate = DateFormat('dd MMM yyyy').format(date);
-
                     TimeOfDay time = parseTimeOfDay(data['time']);
                     String formattedTime = formatTimeOfDay(time);
-
                     return Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 5),
@@ -134,13 +134,14 @@ class ViewTeamMatchSchedule extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               infoBox(
                                 title: formattedDate,
                                 icon: Icons.calendar_today_outlined,
                                 context: context,
                               ),
+                              Sized(width: 0.05,),
                               infoBox(
                                 title: formattedTime,
                                 icon: Icons.schedule_outlined,

@@ -143,7 +143,7 @@ class _ViewMyTournamentsTeamsState extends State<ViewMyTournamentsTeams> {
                             color: whiteColor,
                           ),
                           Obx(()=> controller.selectedTeams.length <=1 ? IconButton(onPressed: (){
-                            Get.to(()=> ViewTeamMatchSchedule(tournamentId: widget.tournamentId,));
+                            Get.to(()=> ViewTeamMatchSchedule(tournamentId: widget.tournamentId,teamOne: '',teamTWo: '',));
                           }, icon: const Icon(Icons.pending_actions_outlined,color: whiteColor,)): IconButton(onPressed: (){
                             Get.to(()=> MatchSchedule(tournamentId: widget.tournamentId, teamOneName: controller.selectedTeams[0].name, teamTwoName: controller.selectedTeams[1].name, teamOneId: controller.selectedTeams[0].id, teamTwoId: controller.selectedTeams[1].id, teamOneToken: controller.selectedTeams[0].token, teamTwoToken: controller.selectedTeams[1].token));
                           }, icon:const Icon(Icons.edit_calendar_outlined,color: whiteColor))),

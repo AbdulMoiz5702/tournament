@@ -52,7 +52,6 @@ class UserprofileController extends GetxController {
     }
     final updatedData = {
       'name': nameController.text.trim(),
-      'myRole': myRole.value,
       'phoneNumber': phoneNumberController.text.trim(),
       'location': locationController.text.trim(),
       'imageLink': imageUrl,

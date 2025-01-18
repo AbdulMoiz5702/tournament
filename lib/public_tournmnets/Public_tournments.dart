@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tournemnt/consts/colors.dart';
 import 'package:tournemnt/consts/firebase_consts.dart';
-import 'package:tournemnt/public_tournmnets/teams/add-teams.dart';
 import 'package:tournemnt/public_tournmnets/teams/teams_screen.dart';
 import 'package:tournemnt/reusbale_widget/bg_widgets.dart';
 import 'package:tournemnt/reusbale_widget/custom_indicator.dart';

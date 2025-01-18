@@ -55,7 +55,7 @@ class ChallengeTypeSelection extends StatelessWidget {
               ),
             ),
           ),
-          body: Expanded(child: Container(color: whiteColor,child: Padding(
+          body: Container(color: whiteColor,child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -208,7 +208,7 @@ class ChallengeTypeSelection extends StatelessWidget {
                 ],
               ),
             ),
-          ),)),
+          ),),
         ));
   }
 }

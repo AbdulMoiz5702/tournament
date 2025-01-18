@@ -49,7 +49,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       if (snapshot.exists) {
         final userData = snapshot.data() as Map<String, dynamic>;
         controller.nameController.text = userData['name'] ?? widget.userName;
-        controller.myRole = userData['myRole'] ?? widget.myRole;
         controller.phoneNumberController.text = userData['phoneNumber'] ?? widget.phone;
         controller.locationController.text = userData['location'] ?? widget.location;
       }

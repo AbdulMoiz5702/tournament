@@ -6,11 +6,10 @@ import 'package:tournemnt/consts/colors.dart';
 import 'package:tournemnt/reusbale_widget/bg_widgets.dart';
 import 'package:tournemnt/reusbale_widget/customLeading.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
+import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/custom_textfeild.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
-import 'package:tournemnt/reusbale_widget/toast_class.dart';
-import '../consts/images_path.dart';
 import '../controllers/auth_controller.dart';
 
 
@@ -84,16 +83,13 @@ class ForgotScreen extends StatelessWidget {
                             return value.isEmpty ? 'Enter Email': null ;
                           },
                           controller: authController.emailController, hintText: 'Enter Your Email',title:'Email'),
-                        CustomButton(title: 'Send', onTap: () async{
-                          if(key.currentState!.validate()){
-                            try{
-                              FirebaseAuth.instance.sendPasswordResetEmail(email: authController.emailController.text.toString()).then((value){
-                              });
-                            }catch(e){
-                              ToastClass.showToastClass(context: context, message: "Something went wrong Error : $e");
+                        Obx(
+                            ()=> authController.isLoading.value == true ? const CustomIndicator() :CustomButton(title: 'Send', onTap: () async{
+                            if(key.currentState!.validate()){
+                              authController.forgotPassword(context: context);
                             }
-                          }
-                        }),
+                          }),
+                        ),
                       ],
                     ),
                   ),

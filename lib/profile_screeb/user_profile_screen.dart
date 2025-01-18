@@ -83,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
                               ? const AssetImage(profilePic) as ImageProvider
                               : NetworkImage(userData['imageLink'])
                                   as ImageProvider,
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
