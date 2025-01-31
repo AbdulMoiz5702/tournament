@@ -80,13 +80,13 @@ class _MessageScreenState extends State<MessageScreen> with WidgetsBindingObserv
             preferredSize: Size(double.infinity,80),
             child: Obx(() => controller.isMessageSelected.value
                 ? EditDeleteAppbar(controller: controller)
-                : UserStatusAppBar(widget: widget)),
+                : UserStatusAppBar(widget: widget,userId: widget.userId,)),
           ),
           body: Container(
             color: loginEnabledButtonColor,
             child: StreamBuilder<QuerySnapshot>(
             stream: fireStore.collection(chatsCollection)
-                .where('combine_id', whereIn: [combinedId1, combinedId2])
+                .where('combine_id', whereIn: [combinedId1,combinedId2])
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -163,15 +163,18 @@ class _MessageScreenState extends State<MessageScreen> with WidgetsBindingObserv
     required String userId,
     required String receiverToken,
     required String userName}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Center(child: largeText(title: 'Start a conversation')),
-        Sized(
-          height: 0.4,
-        ),
-        buildFirstMessageMessageInput(statusController: statusController, controller: controller, context: context,receiverId: receiverId, userId: userId, receiverToken: receiverToken, userName: userName)
-      ],
+    return SingleChildScrollView(
+      physics:const BouncingScrollPhysics(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Center(child: largeText(title: 'Start a conversation')),
+          Sized(
+            height: 0.4,
+          ),
+          buildFirstMessageMessageInput(statusController: statusController, controller: controller, context: context,receiverId: receiverId, userId: userId, receiverToken: receiverToken, userName: userName)
+        ],
+      ),
     );
   }
 

@@ -24,7 +24,9 @@ class MatchSchedule extends StatelessWidget {
   final String teamTwoId;
   final String teamOneToken;
   final String teamTwoToken;
-  const MatchSchedule({super.key,required this.tournamentId,required this.teamOneName,required this.teamTwoName,required this.teamOneId,required this.teamTwoId,required this.teamOneToken,required this.teamTwoToken});
+  final String teamOneImage;
+  final String teamTwoImage;
+  const MatchSchedule({super.key,required this.tournamentId,required this.teamOneName,required this.teamTwoName,required this.teamOneId,required this.teamTwoId,required this.teamOneToken,required this.teamTwoToken,required this.teamOneImage,required this.teamTwoImage});
 
   @override
   Widget build(BuildContext context) {
@@ -137,29 +139,78 @@ class MatchSchedule extends StatelessWidget {
                 Sized(height: 0.05),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Obx(()=> controller.isLoading.value == true ? CustomIndicator() : CustomButton(title: 'Confirm', onTap: (){
-                    // Parse and format date and time
-                    DateTime selectedDate = DateFormat('yyyy-MM-dd').parse(controller.startDateController.text);
-                    String formattedDate = DateFormat('dd MMM yyyy').format(selectedDate);
-                    TimeOfDay selectedTime = TimeOfDay(
-                      hour: int.parse(controller.startDateTimeController.text.split(':')[0]),
-                      minute: int.parse(controller.startDateTimeController.text.split(':')[1].split(' ')[0]),
-                    );
-                    String formattedTime = selectedTime.format(context);
-                    controller.makeSchedule(tournamentId: tournamentId, teamOne: teamOneName, teamTwo: teamTwoName, teamTwoId: teamTwoId, teamOneId: teamOneId,teamOneToken: teamOneToken,teamTwoToken:teamTwoToken,context: context);
-                    // Send notifications with date and time
-                    notificationServices.sendNotificationToSingleUser(
-                        teamOneToken,
-                        'Match Scheduled!',
-                        'Hi ${teamOneName}!\n🎉 Your match against ${teamTwoName} is scheduled for $formattedDate at $formattedTime. Get ready! 🏏'
-                    );
+                  child: Obx(() => controller.isLoading.value
+                      ? CustomIndicator()
+                      : CustomButton(
+                    title: 'Confirm',
+                    onTap: () {
+                      try {
+                        // Validate and parse the input date
+                        if (controller.startDateController.text.isEmpty) {
+                          throw FormatException("Start date is empty");
+                        }
 
-                    notificationServices.sendNotificationToSingleUser(
-                        teamTwoToken,
-                        'Match Scheduled!',
-                        'Hi ${teamTwoName}!\n🎉 Your match against ${teamOneName} is scheduled for $formattedDate at $formattedTime. Prepare for the game! 🏆'
-                    );
-                  })),
+                        // Example input: "22/1/2025 at 3:30" or "22/1/2025"
+                        String rawDate = controller.startDateController.text.trim();
+                        List<String> dateParts = rawDate.contains(' at ') ? rawDate.split(' at ') : [rawDate];
+
+                        // Parse the date
+                        DateTime selectedDate = DateFormat('dd/MM/yyyy').parse(dateParts[0]);
+                        String formattedDate = DateFormat('dd MMM yyyy').format(selectedDate);
+
+                        // Parse the time if provided
+                        String formattedTime = 'not specified'; // Default if no time is given
+                        if (dateParts.length == 2) {
+                          String rawTime = dateParts[1];
+                          int hour = int.parse(rawTime.split(':')[0].trim());
+                          int minute = rawTime.contains(':') ? int.parse(rawTime.split(':')[1].trim()) : 0;
+                          TimeOfDay selectedTime = TimeOfDay(hour: hour, minute: minute);
+                          formattedTime = selectedTime.format(context);
+                        }
+
+                        // Schedule the match
+                        controller.makeSchedule(
+                          tournamentId: tournamentId,
+                          teamOne: teamOneName,
+                          teamTwo: teamTwoName,
+                          teamTwoId: teamTwoId,
+                          teamOneId: teamOneId,
+                          teamOneToken: teamOneToken,
+                          teamTwoToken: teamTwoToken,
+                          context: context,
+                          teamOneImage:teamOneImage,
+                          teamTwoImage: teamTwoImage,
+                        );
+
+                        // Send notifications
+                        notificationServices.sendNotificationToSingleUser(
+                          teamOneToken,
+                          'Match Scheduled!',
+                          'Hi ${teamOneName}!\n🎉 Your match against ${teamTwoName} is scheduled for $formattedDate at $formattedTime. Get ready! 🏏',
+                            {
+                              'type':'ViewTeamMatchSchedule',
+                              'tournamentId':tournamentId,
+                            }
+                        );
+
+                        notificationServices.sendNotificationToSingleUser(
+                          teamTwoToken,
+                          'Match Scheduled!',
+                          'Hi ${teamTwoName}!\n🎉 Your match against ${teamOneName} is scheduled for $formattedDate at $formattedTime. Prepare for the game! 🏆',
+                            {
+                              'type':'ViewTeamMatchSchedule',
+                              'tournamentId':tournamentId,
+                            }
+                        );
+                      } catch (e) {
+                        // Handle invalid input gracefully
+                        print("Error: ${e.toString()}");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Invalid date or time format. Please check your input.")),
+                        );
+                      }
+                    },
+                  )),
                 ),
                 Sized(height: 0.3),
               ],

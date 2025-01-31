@@ -36,23 +36,37 @@ const String profilePic= 'assets/images/camera.png';
  const String myTournamentsIcon= 'assets/svg_images/tournaments.svg';
  const String myMatchesIcon= 'assets/svg_images/matches.svg';
 const String locationIcon= 'assets/svg_images/location.svg';
+ const String privacyIcon= 'assets/svg_images/privacy.svg';
+ const String acceptedChallenges= 'assets/svg_images/accepted_challenges.svg';
+ const String aboutUs= 'assets/svg_images/aboutUs.svg';
+ const String licence= 'assets/svg_images/licence.svg';
+ const String myChallenges= 'assets/svg_images/my_challenges.svg';
+ const String signupAddress= 'assets/svg_images/signup_address.svg';
+ const String chatIconProfile= 'assets/svg_images/comment.svg';
+
 
  // bottom screen
  const String home= 'assets/svg_images/Homeblue.svg';
  const String match= 'assets/svg_images/Ball.svg';
  const String profile= 'assets/svg_images/Profile.svg';
  const String challenge= 'assets/svg_images/Challenge.svg';
+ const String bat= 'assets/svg_images/bat.svg';
  // match types
  const String areaLevel= 'assets/svg_images/area_level.svg';
  const String ageLevel= 'assets/svg_images/age_level.svg';
+
 
  List<String> imagesList = [
   personIcon,
   myTournamentsIcon,
   challenge,
-  addressIcon,
+  myChallenges,
+  acceptedChallenges,
+  chatIconProfile,
   passwordIcon,
-  passwordIcon,
+  aboutUs,
+  privacyIcon,
+  licence,
   passwordIcon,
  ];
 
@@ -62,11 +76,19 @@ const String locationIcon= 'assets/svg_images/location.svg';
   'My Matches',
   'My Challenges',
   'Accepted Challenges',
+  'Chats',
   'Reset Password',
+  'About Us',
+  'Privacy Policies',
+  'Licences',
   'Logout',
  ];
 
  List<bool> isTrue = [
+  false,
+  false,
+  false,
+  false,
   false,
   false,
   false,
@@ -145,5 +167,11 @@ final List<String> areaLevelList = [
   'Open Challenge',
   'District Level',
   'Other',
+ ];
+
+ List<String> rolesSvg = [
+  bat,
+  match,
+  challenge,
  ];
 

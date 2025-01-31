@@ -196,6 +196,8 @@ class AddTournamentsController extends GetxController {
     try {
       isLoading(true);
       final String name = nameController.text;
+      // Format time as "TimeOfDay(06:05)"
+      final String formattedStartTime = "TimeOfDay(${selectedTime.value.hour.toString().padLeft(2, '0')}:${selectedTime.value.minute.toString().padLeft(2, '0')})";
       await fireStore.collection(tournamentsCollection).add({
         'name': name,
         'organizerName': organizerName.text.toString(),
@@ -211,7 +213,7 @@ class AddTournamentsController extends GetxController {
         'imagePath':selectedImage.toString(),
         'token':userToken,
         'rules':tournamentsRules.text.trim(),
-        'startTime':selectedTime.value.toString(),
+        'startTime':formattedStartTime,
         'totalPlayers':int.parse(totalPlayerController.text.toString()),
       }).then((value) => {
         isLoading(false),

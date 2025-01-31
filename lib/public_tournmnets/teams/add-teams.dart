@@ -23,7 +23,8 @@ class AddTeamPage extends StatefulWidget {
   final String userId;
   final int registerTeams ;
   final String token ;
-  const AddTeamPage({super.key,required this.tournamentId,required this.userId,required this.registerTeams,required this.token});
+  final String isCompleted;
+  const AddTeamPage({super.key,required this.tournamentId,required this.userId,required this.registerTeams,required this.token,required this.isCompleted});
   @override
   State<AddTeamPage> createState() => _AddTeamPageState();
 }
@@ -141,7 +142,17 @@ class _AddTeamPageState extends State<AddTeamPage> {
                     if(key.currentState!.validate()){
                       if(controller.selectedImage.value != null && controller.selectedImage.value!.isNotEmpty){
                         controller.addTeam(tournamentId: widget.tournamentId,userId: widget.userId,context: context);
-                        notificationServices.sendNotificationToSingleUser(widget.token, 'Hey There', 'A Team got register in your tournament');
+                        notificationServices.sendNotificationToSingleUser(widget.token, 'Hey There', 'A Team got register in your tournament',
+                            {
+                              'type':'ViewMyTournamentsTeams',
+                              'tournamentId':widget.tournamentId,
+                              'userId':widget.userId,
+                              'isHomeScreen':false.toString(),
+                              'isCompleted':widget.isCompleted.toString(),
+                              'registerTeams':widget.registerTeams.toString(),
+                              'token':widget.token
+                            }
+                        );
                       }else{
                         ToastClass.showToastClass(context: context, message: 'Please Select your Team Icon');
                       }

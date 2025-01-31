@@ -44,4 +44,11 @@ class TokenUpdateController extends GetxController {
     }
   }
 
+  userProfileToken() async {
+    var data =  fireStore.collection(usersCollection).doc(currentUser!.uid);
+    await data.update({
+      'token':userToken,
+    });
+  }
+
 }

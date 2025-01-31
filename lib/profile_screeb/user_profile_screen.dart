@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tournemnt/app_information_screens/about_us.dart';
 import 'package:tournemnt/auth_screen/login_Screen.dart';
+import 'package:tournemnt/chat_screens/chat_screen.dart';
 import 'package:tournemnt/consts/colors.dart';
 import 'package:tournemnt/consts/images_path.dart';
 import 'package:tournemnt/my_tournments/my_tournaments_teams/mymatches.dart';
@@ -12,6 +14,8 @@ import 'package:tournemnt/reusbale_widget/custom_indicator.dart';
 import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import 'package:tournemnt/reusbale_widget/toast_class.dart';
+import '../app_information_screens/licences_screen.dart';
+import '../app_information_screens/privacy_policy_screen.dart';
 import '../auth_screen/forgot_password-screen.dart';
 import '../consts/firebase_consts.dart';
 import '../my_1v1_challenges/myChallenges.dart';
@@ -178,9 +182,31 @@ class ProfileScreen extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     CupertinoPageRoute(
-                                        builder: (context) =>  ForgotScreen()));
+                                        builder: (context) =>   ChatScreen(userId: userId,)));
                                 break;
                               case 6:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>  ForgotScreen()));
+                                break;
+                              case 7:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>  const AboutUs()));
+                              case 8:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>  PrivacyPolicyScreen()));
+                              case 9:
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>   LicensesScreen()));
+                                break;
+                              case 10:
                                 FirebaseAuth.instance.signOut().then((value) {
                                   Navigator.pushReplacement(
                                       context,
@@ -209,7 +235,7 @@ class ProfileScreen extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    SvgPicture.asset(imagesList[index],color: buttonColor,),
+                                    SvgPicture.asset(imagesList[index],color: buttonColor,height: 25,width: 25,),
                                     Sized(width: 0.05,),
                                  smallText(title: imageNames[index], fontSize: 14.0,fontWeight: FontWeight.w500,color:isTrue[index] == true ?  redColor : userProfileTextColor),
                                   ],

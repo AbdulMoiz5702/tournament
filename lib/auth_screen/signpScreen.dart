@@ -47,16 +47,16 @@ class SignupScreen extends StatelessWidget {
                       largeText(title: 'Create your',color: whiteColor),
                       largeText(title: 'account',color: whiteColor),
                       Sized(height: 0.005,),
-                      smallText(title: 'Sign in-up to enjoy the best managing experience',color: secondaryTextColor,fontWeight: FontWeight.w500),
+                      smallText(title: 'Enter Your Valid Information to Join our app.',color: secondaryTextColor,fontWeight: FontWeight.w500),
                       Sized(height: 0.05,),
                     ],
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
                   height: MediaQuery.sizeOf(context).height * 0.75,
                   width: MediaQuery.sizeOf(context).width * 1,
-                  decoration: BoxDecoration(
+                  decoration:const  BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: Radius.circular(35),topLeft: Radius.circular(35)),
                     color: whiteColor,
                   ),
@@ -140,7 +140,7 @@ class SignupScreen extends StatelessWidget {
                             height: 0.02,
                           ),
                           CustomTextField(
-                            imagePath: addressIcon,
+                            imagePath: signupAddress,
                             isDense: true,
                             validate: (value){
                               return value.isEmpty ? 'Enter Address': null ;

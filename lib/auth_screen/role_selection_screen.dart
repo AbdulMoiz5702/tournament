@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:tournemnt/auth_screen/login_Screen.dart';
 import 'package:tournemnt/auth_screen/signpScreen.dart';
+import 'package:tournemnt/consts/images_path.dart';
 import 'package:tournemnt/controllers/auth_controller.dart';
 import 'package:tournemnt/reusbale_widget/bg_widgets.dart';
 import 'package:tournemnt/reusbale_widget/custom_button.dart';
@@ -33,7 +35,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 largeText(title: 'Create your',color: whiteColor),
                 largeText(title: 'account',color: whiteColor),
                 Sized(height: 0.005,),
-                smallText(title: 'Sign in-up to enjoy the best managing experience',color: secondaryTextColor,fontWeight: FontWeight.w500),
+                smallText(title: 'Choose the option mentioned below',color: secondaryTextColor,fontWeight: FontWeight.w500),
                 Sized(height: 0.05,),
               ],
             ),
@@ -42,11 +44,11 @@ class RoleSelectionScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
                 height: MediaQuery.sizeOf(context).height * 0.68,
                 width: MediaQuery.sizeOf(context).width * 1,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(35),topLeft: Radius.circular(35)),
+                decoration: const BoxDecoration(
+                  borderRadius:  BorderRadius.only(topRight: Radius.circular(35),topLeft: Radius.circular(35)),
                   color: whiteColor,
                 ),
                 child: Column(
@@ -104,7 +106,16 @@ class RoleSelectionScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30),
                                 color: whiteColor,
                               ),
-                              child: mediumText(title: controller.roles[index],fontSize: 14,fontWeight: FontWeight.w600,color: controller.currentIndex.value == index ? buttonColor:loginDisableButtonColor),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Sized(width: 0.28,),
+                                  SvgPicture.asset(rolesSvg[index],color: buttonColor,),
+                                  Sized(width: 0.08,),
+                                  mediumText(title: controller.roles[index],fontSize: 14,fontWeight: FontWeight.w600,color: controller.currentIndex.value == index ? buttonColor:loginDisableButtonColor),
+                                ],
+                              ),
                             ),
                           );
                         }),

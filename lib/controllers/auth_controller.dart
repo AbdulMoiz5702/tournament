@@ -15,11 +15,12 @@ class AuthController extends GetxController {
   var callController  = Get.put(ZegoCloudController());
 
   List<String> roles = [
-    'Bowler',
     'Batsman',
+    'Bowler',
     'All Rounder',
-    'Wicket Keeper'
   ];
+
+
 
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
@@ -61,7 +62,7 @@ class AuthController extends GetxController {
       final User? user = userCredential.user;
       if (user != null) {
         await notificationServices.requestNotificationPermission();
-        await notificationServices.firebaseInit(context);
+        await notificationServices.firebaseInit();
         try {
           String? token = await notificationServices.getDeviceToken();
           if (token != null) {
@@ -111,7 +112,7 @@ class AuthController extends GetxController {
       if (user != null) {
         isLoading(false);
         await notificationServices.requestNotificationPermission();
-        await notificationServices.firebaseInit(context);
+        await notificationServices.firebaseInit();
         try {
           String? token = await notificationServices.getDeviceToken();
           if (token != null) {

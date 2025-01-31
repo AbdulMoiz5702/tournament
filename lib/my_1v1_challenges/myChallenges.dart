@@ -16,6 +16,7 @@ import '../controllers/User_Challenges_controller.dart';
 import '../reusbale_widget/customLeading.dart';
 import '../reusbale_widget/custom_sizedBox.dart';
 import '../reusbale_widget/text_widgets.dart';
+import 'challenge_update_screen.dart';
 
 class UserChallengesScreen extends StatefulWidget {
   final String userId;
@@ -99,7 +100,8 @@ class _UserChallengesScreenState extends State<UserChallengesScreen> {
                       controller.deleteChallenge(context: context, challengeId: doc.id);
                     },
                     editOnPressed: (context){
-                      controller.showEditDialog(context: context, challengeId: doc.id, teamName: doc['challengerTeamName'], leaderName: doc['teamLeaderName'], leaderPhone: doc['challengerLeaderPhone'], location:  doc['location']);
+                      Get.to(()=> UpdateChallengePage(challenge: doc,));
+                    //  controller.showEditDialog(context: context, challengeId: doc.id, teamName: doc['challengerTeamName'], leaderName: doc['teamLeaderName'], leaderPhone: doc['challengerLeaderPhone'], location:  doc['location']);
                     },
                     child: ChallengeCard(
                         age: doc['age'],
@@ -157,7 +159,7 @@ class _UserChallengesScreenState extends State<UserChallengesScreen> {
                 controller.deleteChallenge(context: context, challengeId: doc.id);
               },
               editOnPressed: (context){
-                controller.showEditDialog(context: context, challengeId: doc.id, teamName: doc['challengerTeamName'], leaderName: doc['teamLeaderName'], leaderPhone: doc['challengerLeaderPhone'], location:  doc['location']);
+                Get.to(()=>UpdateChallengePage(challenge: doc));
               },
               child: ChallengeCard(
                   age: doc['age'],

@@ -48,10 +48,10 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+                  padding:const  EdgeInsets.symmetric(horizontal: 20,vertical: 15),
                   height: MediaQuery.sizeOf(context).height * 0.68,
                   width: MediaQuery.sizeOf(context).width * 1,
-                  decoration:  BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(40),

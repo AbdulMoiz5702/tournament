@@ -12,12 +12,14 @@ class CallButton extends StatefulWidget {
   const CallButton({
     required this.name,
     required this.id,
-    this.color = loginEnabledButtonColor
+    this.color = loginEnabledButtonColor,
+    required this.userId,
   });
 
   final String id ;
   final String name ;
   final Color color ;
+  final String userId;
 
   @override
   State<CallButton> createState() => _CallButtonState();
@@ -31,15 +33,15 @@ class _CallButtonState extends State<CallButton> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-  //  controller.startCall(userId: currentUser!.uid, userName:controller.userName,context: context);
+    controller.startCall(userId: widget.userId, userName:controller.userName,context: context);
     print('=-----------------------------------------chatButton_init-----------------------------------------------------');
   }
 
   @override
   Widget build(BuildContext context) {
     return ZegoSendCallInvitationButton(
-      iconSize: Size(35, 35),
-      buttonSize: Size(40, 40),
+      iconSize: const Size(35, 35),
+      buttonSize:const  Size(40, 40),
       isVideoCall: false,
       resourceID: "tournament_app",
       invitees: [

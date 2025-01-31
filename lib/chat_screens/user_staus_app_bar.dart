@@ -16,9 +16,11 @@ class UserStatusAppBar extends StatelessWidget {
   const UserStatusAppBar({
     Key? key,
     required this.widget,
+    required this.userId,
   }) : super(key: key);
 
   final MessageScreen widget;
+  final String userId ;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class UserStatusAppBar extends StatelessWidget {
               smallText(title :widget.receiverName,fontWeight: FontWeight.bold),
             ],
           ),
-          CallButton(name: widget.receiverName, id: widget.receiverId),
+          CallButton(name: widget.receiverName, id: widget.receiverId,userId: widget.userId,),
         ],
       ),
       leading: GestureDetector(

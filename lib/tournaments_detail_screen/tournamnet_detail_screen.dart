@@ -68,7 +68,7 @@ class TournamentDetailScreen extends StatelessWidget {
                       ),
                       Sized(height: 0.005),
                       smallText(
-                        title: 'Enter Your Valid Information .',
+                        title: 'Full Tournament Details .',
                         color: secondaryTextColor.withOpacity(0.85),
                         fontWeight: FontWeight.w500,
                       ),

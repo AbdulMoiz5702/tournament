@@ -78,6 +78,7 @@ class AddChallengesController extends GetxController {
     String description = captainName.text;
     if (title.isNotEmpty && description.isNotEmpty) {
       isLoading(true);
+      final String formattedStartTime = "TimeOfDay(${selectedTime.value.hour.toString().padLeft(2, '0')}:${selectedTime.value.minute.toString().padLeft(2, '0')})";
       fireStore.collection(challengesCollection).add({
         'challengerTeamName': title,
         'teamLeaderName': description,
@@ -91,7 +92,7 @@ class AddChallengesController extends GetxController {
         'challenger':currentUser!.uid,
         'token':userToken,
         'startDate': selectedDate.toString(),
-        'startTime':selectedTime.toString(),
+        'startTime':formattedStartTime,
         'imagePath':selectedImage.toString(),
       }).then((value) {
         isLoading(false);

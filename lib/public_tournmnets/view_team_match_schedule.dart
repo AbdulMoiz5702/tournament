@@ -13,9 +13,7 @@ import '../reusbale_widget/text_widgets.dart';
 
 class ViewTeamMatchSchedule extends StatelessWidget {
   final String tournamentId;
-  final String teamOne;
-  final String teamTWo ;
-  const ViewTeamMatchSchedule({super.key, required this.tournamentId,required this.teamOne,required this.teamTWo});
+  const ViewTeamMatchSchedule({super.key, required this.tournamentId});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class ViewTeamMatchSchedule extends StatelessWidget {
         final minute = int.parse(match.group(2)!);
         return TimeOfDay(hour: hour, minute: minute);
       } else {
-        throw FormatException("Invalid TimeOfDay format");
+        throw const FormatException("Invalid TimeOfDay format");
       }
     }
 
@@ -76,7 +74,7 @@ class ViewTeamMatchSchedule extends StatelessWidget {
                       ),
                       Sized(height: 0.005),
                       smallText(
-                        title: 'See your scheduled matches below.',
+                        title: 'Next Match List in Show below ',
                         color: secondaryTextColor.withOpacity(0.85),
                         fontWeight: FontWeight.w500,
                       ),
@@ -124,14 +122,14 @@ class ViewTeamMatchSchedule extends StatelessWidget {
                     return Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 5),
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 20),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: bgTeamCard,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -141,7 +139,7 @@ class ViewTeamMatchSchedule extends StatelessWidget {
                                 icon: Icons.calendar_today_outlined,
                                 context: context,
                               ),
-                              Sized(width: 0.05,),
+                              Sized(width: 0.02,),
                               infoBox(
                                 title: formattedTime,
                                 icon: Icons.schedule_outlined,
@@ -153,16 +151,31 @@ class ViewTeamMatchSchedule extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              infoBox(
-                                title: data['teamOne'],
-                                icon: Icons.person,
-                                context: context,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundColor: blackColor,
+                                    backgroundImage: AssetImage(data['teamOneImage']),
+                                  ),
+                                  Sized(height: 0.01,),
+                                  smallText(title: data['teamOne'],color: blackColor)
+                                ],
                               ),
                               mediumText(title: 'Vs',fontSize: 18),
-                              infoBox(
-                                title: data['teamTwo'],
-                                icon: Icons.person,
-                                context: context,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundColor: blackColor,
+                                    backgroundImage: AssetImage(data['teamTwoImage']),
+                                  ),
+                                  Sized(height: 0.01,),
+                                  smallText(title: data['teamTwo'],color: blackColor)
+                                  
+                                ],
                               ),
                             ],
                           ),

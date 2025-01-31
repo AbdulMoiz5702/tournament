@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tournemnt/consts/firebase_consts.dart';
+import 'package:tournemnt/controllers/view_challenge_controller.dart';
 import '../consts/colors.dart';
 import '../consts/images_path.dart';
 import '../reusbale_widget/custom_sizedBox.dart';
@@ -14,6 +15,7 @@ import '../reusbale_widget/toast_class.dart';
 import 'call_controller.dart';
 
 class AddTeamToChallenge extends GetxController {
+
 
 
   @override
@@ -44,18 +46,19 @@ class AddTeamToChallenge extends GetxController {
   var isLoading = false.obs;
   var selectedDate = Rxn<DateTime>();
   var selectedImage = Rxn<String>();
+  var viewChallengeController = Get.put(ViewChallengesController());
 
   selectImage(BuildContext context) async {
     await showModalBottomSheet(
       backgroundColor:loginEnabledButtonColor,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
       ),
       isScrollControlled: true,
       context: context,
       builder: (BuildContext context) {
         return Container(
-          decoration: BoxDecoration(
+          decoration:const  BoxDecoration(
             color: loginEnabledButtonColor,
             borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
           ),
@@ -65,8 +68,8 @@ class AddTeamToChallenge extends GetxController {
             children: [
               Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
+                  padding:const  EdgeInsets.all(5),
+                  decoration:const  BoxDecoration(
                     color: loginEnabledButtonColor,
                   ),
                   child: mediumText(title: 'Select Your Avatar',color: whiteColor,context: context)),
@@ -123,6 +126,7 @@ class AddTeamToChallenge extends GetxController {
   addTeam({required BuildContext context,required String challengeId,required}) {
     fireStore.collection(challengesCollection).doc(challengeId).get().then((challengeSnapshot) {
       var challengeData = challengeSnapshot.data();
+      viewChallengeController.isChallengeAccepted(true);
       int teamCount = challengeData?['teamCount'] ?? 0;
       if (teamCount < 2) {
         String teamName = teamNameController.text;
@@ -145,13 +149,16 @@ class AddTeamToChallenge extends GetxController {
             Navigator.of(context).pop();
           }).catchError((error) {
             isLoading(false);
+            viewChallengeController.isChallengeAccepted(true);
             ToastClass.showToastClass(context: context, message: 'Failed to add team: $error');
           });
         } else {
+          viewChallengeController.isChallengeAccepted(true);
           isLoading(false);
         }
       } else {
         isLoading(false);
+        viewChallengeController.isChallengeAccepted(true);
         ToastClass.showToastClass(context: context, message: 'This challenge is already full');
       }
     });

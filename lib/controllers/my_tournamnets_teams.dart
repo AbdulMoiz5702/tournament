@@ -67,6 +67,7 @@ class MyTournamentsTeamsController extends GetxController {
     await fireStore.collection(teamsCollection).doc(teamId).update({
       'teamResult': updatedTeamStatus,
       'roundsQualify': roundNUmber,
+      'vs':false,
     }).then((value) {
       ToastClass.showToastClass(
           context: context, message: 'Team Status Updated');
@@ -277,8 +278,7 @@ class MyTournamentsTeamsController extends GetxController {
       },
     );
   }
-
-  makeSchedule({required String tournamentId,required String teamOne,required String teamTwo,required String teamTwoId,required String teamOneId,required String teamOneToken,required String teamTwoToken,required BuildContext context})async{
+  makeSchedule({required String tournamentId,required String teamOne,required String teamTwo,required String teamTwoId,required String teamOneId,required String teamOneToken,required String teamTwoToken,required BuildContext context,required String teamOneImage,required String teamTwoImage})async{
     try{
       isLoading(true);
       var data = fireStore.collection(tournamentsCollection).doc(tournamentId).collection(vsTeamCollection).doc();
@@ -288,24 +288,29 @@ class MyTournamentsTeamsController extends GetxController {
         'teamTwoId':teamTwoId,
         'teamOneId':teamOneId,
         'date':selectedDate.toString(),
-        'time':selectedTime.toString(),
+        'time':selectedTime.value.toString(),
         'teamOneToken':teamOneToken,
         'teamTwoToken':teamTwoToken,
+        'teamOneImage':teamOneImage,
+        'teamTwoImage':teamTwoImage,
       }).then((value) async {
-        // Update vs field for teamOneId
-        var teamOneDoc = fireStore
-            .collection(tournamentsCollection)
-            .doc(tournamentId)
-            .collection(teamsCollection)
-            .doc(teamOneId);
-        await teamOneDoc.update({'vs': true});
-        // Update vs field for teamTwoId
-        var teamTwoDoc = fireStore
-            .collection(tournamentsCollection)
-            .doc(tournamentId)
-            .collection(teamsCollection)
-            .doc(teamTwoId);
-        await teamTwoDoc.update({'vs': true});
+        try{
+          // Update 'vs' field for teamOne
+          var teamOneDoc = fireStore
+              .collection(teamsCollection) // Directly access teamsCollection
+              .doc(teamOneId);
+
+          await teamOneDoc.update({'vs': true});
+
+          // Update 'vs' field for teamTwo
+          var teamTwoDoc = fireStore
+              .collection(teamsCollection) // Directly access teamsCollection
+              .doc(teamTwoId);
+
+          await teamTwoDoc.update({'vs': true});
+        }catch(e){
+          print('vs error : $e');
+        }
       });
       isLoading(false);
       selectedTeams.clear();

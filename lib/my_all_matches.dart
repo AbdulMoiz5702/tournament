@@ -98,14 +98,14 @@ class _UserAllMatchesScreenState extends State<UserAllMatchesScreen> {
                     children: [
                       Sized(height: 0.005),
                       largeText(
-                        title: 'Add Tournament',
+                        title: 'My Match Details',
                         context: context,
                         fontWeight: FontWeight.w500,
                         color: whiteColor,
                       ),
                       Sized(height: 0.005),
                       smallText(
-                        title: 'Enter Your Valid Information .',
+                        title: 'Here is the list of tournaments you have created.',
                         color: secondaryTextColor.withOpacity(0.85),
                         fontWeight: FontWeight.w500,
                       ),

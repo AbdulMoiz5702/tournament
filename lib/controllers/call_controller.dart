@@ -51,15 +51,14 @@ class ZegoCloudController extends GetxController {
 
   void startCall({required String userId ,required String userName,required BuildContext context}) async {
     await ZegoUIKitPrebuiltCallInvitationService().init(
-      appID: 719365644, /*input your AppID*/
-      appSign: 'cde26876b30b23d0d8185a3fda5fda32e3adb0afac22ebeda11e77f4f68bbaea' /*input your AppSign*/,
+      appID: 272398324, /*input your AppID*/
+      appSign: '957564bfb4fb15a3a026c69733ccad4a329fa16cb1e586eab04df1761ef326d1' /*input your AppSign*/,
       userID:userId,
       userName:userName,
       plugins: [ZegoUIKitSignalingPlugin()],
       notificationConfig: ZegoCallInvitationNotificationConfig(
         androidNotificationConfig: ZegoCallAndroidNotificationConfig(
           showFullScreen: true,
-          fullScreenBackground: 'assets/image/call.png',
           channelID: "ZegoUIKit",
           channelName: "Call Notifications",
           sound: "call",

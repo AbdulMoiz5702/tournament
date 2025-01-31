@@ -95,21 +95,25 @@ class ViewChallengeScreen extends StatelessWidget {
               ),
                   ),
                   Sized(height: 0.02,),
-                  isChallengeAccepted == 'true'? Container(height: 5,): Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * 0.12),
-                    child: CustomButton(
-                      color: cardTextColor,
-                      onTap: () {Navigator.push(
-                          context,
-                          CupertinoPageRoute(builder: (context) => AddTeamToChallengeScreen(challengeId,userId)),
-                        );},
-                      title: 'Accept Challenge',
-                    ),
+                  isChallengeAccepted == 'true'? Container(height: 5,): Obx(
+                  ()=> controller.isChallengeAccepted.value == false ? Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * 0.12),
+                      child: CustomButton(
+                        color: cardTextColor,
+                        onTap: () {Navigator.push(
+                            context,
+                            CupertinoPageRoute(builder: (context) => AddTeamToChallengeScreen(challengeId,userId)),
+                          );},
+                        title: 'Accept Challenge',
+                      ),
+                    ) : Sized(),
                   ),
                   Sized(height: 0.02,),
-                  isChallengeAccepted == 'true'? Transform.rotate(
-                    angle: 110,
-                      child: Image.asset(vs,height: MediaQuery.sizeOf(context).height * 0.1,)) :  Container(height: 5,),
+                  isChallengeAccepted == 'true'? Obx(
+                   ()=> controller.isChallengeAccepted.value == true ? Transform.rotate(
+                      angle: 110,
+                        child: Image.asset(vs,height: MediaQuery.sizeOf(context).height * 0.1,)): Sized(),
+                  ) :  Container(height: 5,),
                   Sized(height: 0.02,),
                   StreamBuilder(
                     stream: FirebaseFirestore.instance.collection(challengesCollection).doc(challengeId).collection(challengesTeamCollection).snapshots(),

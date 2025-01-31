@@ -13,12 +13,29 @@ import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import '../challenges_details/challenges_details_screen.dart';
 import '../chat_screens/messages.dart';
 import '../consts/colors.dart';
+import '../controllers/token_update_controller.dart';
 import '../reusbale_widget/challenge_card.dart';
 import '../reusbale_widget/custom_sizedBox.dart';
 
-class ChallengesListScreen extends StatelessWidget {
+class ChallengesListScreen extends StatefulWidget {
   final String userId ;
   const ChallengesListScreen({super.key,required this.userId});
+
+  @override
+  State<ChallengesListScreen> createState() => _ChallengesListScreenState();
+}
+
+class _ChallengesListScreenState extends State<ChallengesListScreen> {
+
+  var controller = Get.put(TokenUpdateController());
+
+  @override
+  void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
+    super.initState();
+    controller.updateUserChallengerToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BgWidget(
@@ -82,12 +99,12 @@ class ChallengesListScreen extends StatelessWidget {
                       Get.to(()=> ChallengesDetailsScreen(data: doc,));
                     },
                     onMessage: (){
-                      Get.to(()=> MessageScreen(receiverId: doc['challenger'],receiverName: doc['teamLeaderName'],receiverToken: doc['token'],userId:userId,));
+                      Get.to(()=> MessageScreen(receiverId: doc['challenger'],receiverName: doc['teamLeaderName'],receiverToken: doc['token'],userId:widget.userId,));
                     },
                     onTap: (){
                       Navigator.push(
                         context,
-                        CupertinoPageRoute(builder: (context) => ViewChallengeScreen(doc.id,userId,doc['isChallengeAccepted'])),
+                        CupertinoPageRoute(builder: (context) => ViewChallengeScreen(doc.id,widget.userId,doc['isChallengeAccepted'])),
                       );
                     },
                     startDate: formattedDate,
@@ -99,7 +116,7 @@ class ChallengesListScreen extends StatelessWidget {
                     challengerId:doc['challenger'],
                     location:doc['location'],
                     teamCount:doc['teamCount'],
-                    userId: userId,
+                    userId: widget.userId,
                     isChallengeAccepted: doc['isChallengeAccepted'],
                   );
                 }).toList(),
@@ -110,7 +127,7 @@ class ChallengesListScreen extends StatelessWidget {
         floatingActionButton:CustomFloatingAction(onTap: () {
           Navigator.push(
             context,
-            CupertinoPageRoute(builder: (context) => AddChallengeScreen(userId: userId,)),
+            CupertinoPageRoute(builder: (context) => AddChallengeScreen(userId: widget.userId,)),
           );
         },)
       ),

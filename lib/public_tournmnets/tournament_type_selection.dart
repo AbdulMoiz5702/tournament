@@ -13,11 +13,11 @@ import '../reusbale_widget/text_widgets.dart';
 
 
 class TournamentTypeSelection extends StatelessWidget {
-  const TournamentTypeSelection({super.key});
+  final dynamic controller ;
+  const TournamentTypeSelection({super.key,required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(AddTournamentsController());
     return BgWidget(
         child: Scaffold(
           appBar: AppBar(
@@ -200,10 +200,14 @@ class TournamentTypeSelection extends StatelessWidget {
                     ],
                   ): Sized(height: 0.02,),
                  ),
-                  CustomButton(title: 'Confirm', onTap: (){
-                    controller.tournamentType.text = controller.getSelectedTournamentType();
-                    Navigator.pop(context, controller.tournamentType.text);
-                  }),
+                  CustomButton(
+                      title: 'Confirm',
+                      onTap: () {
+                        controller.tournamentType.text = controller.getSelectedTournamentType();
+                        print("Selected Tournament Type: ${controller.tournamentType.text}");  // Add this line for debugging
+                        Navigator.pop(context, controller.tournamentType.text);
+                      }
+                  ),
                   Sized(height: 0.1,),
                 ],
               ),

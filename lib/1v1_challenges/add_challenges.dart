@@ -102,7 +102,7 @@ class AddChallengeScreen extends StatelessWidget {
                   Sized(height: 0.03,),
                   CustomTextField(
                     onTap: (){
-                      Get.to(()=> ChallengeTypeSelection());
+                      Get.to(()=> ChallengeTypeSelection(controller: controller,));
                     },
                     imagePath: personIcon,
                     validate: (value){

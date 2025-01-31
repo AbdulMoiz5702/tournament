@@ -157,7 +157,7 @@ class AddTournamentPage extends StatelessWidget {
                         Sized(height: 0.03),
                         CustomTextField(
                           onTap: (){
-                            Get.to(()=> TournamentTypeSelection());
+                            Get.to(()=> TournamentTypeSelection(controller:controller,));
                           },
                           imagePath: personIcon,
                           validate: (value){

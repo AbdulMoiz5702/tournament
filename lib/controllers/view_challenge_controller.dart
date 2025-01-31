@@ -5,6 +5,9 @@ import '../reusbale_widget/toast_class.dart';
 
 class ViewChallengesController extends GetxController {
 
+
+  var isChallengeAccepted = false.obs;
+
   void deleteTeam({required BuildContext context,required String teamId,required  String challengeId}) async {
     try {
       await fireStore.collection(challengesCollection).doc(challengeId).collection(challengesTeamCollection).doc(teamId).delete();

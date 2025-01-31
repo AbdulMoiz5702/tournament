@@ -12,6 +12,7 @@ import '../../consts/colors.dart';
 import '../../models_classes.dart';
 import '../../reusbale_widget/custom_sizedBox.dart';
 import '../../reusbale_widget/team_card.dart';
+import '../view_team_match_schedule.dart';
 import 'add-teams.dart';
 
 class TeamListPage extends StatelessWidget {
@@ -58,7 +59,7 @@ class TeamListPage extends StatelessWidget {
             ),
           ),
           bottom: PreferredSize(
-            preferredSize: Size(double.infinity, 55),
+            preferredSize: Size(double.infinity, 80),
             child: Padding(
               padding: EdgeInsets.only(
                   left: MediaQuery.sizeOf(context).width * 0.1),
@@ -70,11 +71,19 @@ class TeamListPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Sized(height: 0.005),
-                      largeText(
-                        title: 'Registered Teams info',
-                        context: context,
-                        fontWeight: FontWeight.w500,
-                        color: whiteColor,
+                      Row(
+                        children: [
+                          largeText(
+                            fontSize: 24,
+                            title: 'Registered Teams info',
+                            context: context,
+                            fontWeight: FontWeight.w500,
+                            color: whiteColor,
+                          ),
+                          IconButton(onPressed: (){
+                            Get.to(()=> ViewTeamMatchSchedule(tournamentId: tournamentId));
+                          }, icon:const  Icon(Icons.pending_actions_outlined,color: whiteColor,),),
+                        ],
                       ),
                       Sized(height: 0.005),
                       smallText(
@@ -133,6 +142,7 @@ class TeamListPage extends StatelessWidget {
                 itemCount: teams.length,
                 itemBuilder: (context, index) {
                   return TeamCard(
+                    vs: teams[index].vs,
                     onMessage: (){
                       Get.to(()=> MessageScreen(receiverId:userId ,receiverName: teams[index].teamLeaderName,receiverToken: teams[index].token,userId:userId,));
                     },
@@ -167,6 +177,7 @@ class TeamListPage extends StatelessWidget {
                     userId: userId,
                     registerTeams: registerTeams,
                     token: token,
+                    isCompleted: isCompleted,
                   ),
                 ),
               );

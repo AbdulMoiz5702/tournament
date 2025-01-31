@@ -82,6 +82,11 @@ class _ViewMyTournamentsTeamsState extends State<ViewMyTournamentsTeams> {
                     'Tournament Started! 🏆',
                     'The competition is on! Good luck and give it your best! 🔥',
                     teamsCollection,
+                    {
+                      'type':'MyMatchesTeamScreen',
+                      'tournamentId':widget.tournamentId,
+                      'isHomeScreen':widget.isHomeScreen.toString(),
+                    }
                   );
                                 },
                               )
@@ -97,6 +102,11 @@ class _ViewMyTournamentsTeamsState extends State<ViewMyTournamentsTeams> {
                     'Registration Now Open! 📝',
                     'Join the tournament and secure your spot! 🎉',
                     teamsCollection,
+                      {
+                        'type':'MyMatchesTeamScreen',
+                        'tournamentId':widget.tournamentId,
+                        'isHomeScreen':widget.isHomeScreen.toString(),
+                      }
                   );
                                 },
                               ),
@@ -143,9 +153,9 @@ class _ViewMyTournamentsTeamsState extends State<ViewMyTournamentsTeams> {
                             color: whiteColor,
                           ),
                           Obx(()=> controller.selectedTeams.length <=1 ? IconButton(onPressed: (){
-                            Get.to(()=> ViewTeamMatchSchedule(tournamentId: widget.tournamentId,teamOne: '',teamTWo: '',));
+                            Get.to(()=> ViewTeamMatchSchedule(tournamentId: widget.tournamentId));
                           }, icon: const Icon(Icons.pending_actions_outlined,color: whiteColor,)): IconButton(onPressed: (){
-                            Get.to(()=> MatchSchedule(tournamentId: widget.tournamentId, teamOneName: controller.selectedTeams[0].name, teamTwoName: controller.selectedTeams[1].name, teamOneId: controller.selectedTeams[0].id, teamTwoId: controller.selectedTeams[1].id, teamOneToken: controller.selectedTeams[0].token, teamTwoToken: controller.selectedTeams[1].token));
+                            Get.to(()=> MatchSchedule(tournamentId: widget.tournamentId, teamOneName: controller.selectedTeams[0].name, teamTwoName: controller.selectedTeams[1].name, teamOneId: controller.selectedTeams[0].id, teamTwoId: controller.selectedTeams[1].id, teamOneToken: controller.selectedTeams[0].token, teamTwoToken: controller.selectedTeams[1].token,teamOneImage: controller.selectedTeams[0].imageLink,teamTwoImage: controller.selectedTeams[1].imageLink,));
                           }, icon:const Icon(Icons.edit_calendar_outlined,color: whiteColor))),
                         ],
                       ),
@@ -208,16 +218,30 @@ class _ViewMyTournamentsTeamsState extends State<ViewMyTournamentsTeams> {
                           isHomeScreen: widget.isHomeScreen,
                           deleteOnPressed: (context){
                             controller.confirmDeleteTeam(context: context,teamId: teams[index].id,tournamentId: widget.tournamentId,registerTeams: widget.registerTeams);
-                            notificationServices.sendNotificationToSingleUser(widget.token, '🚫 Tournament Exit', 'Don\'t give up! There are more tournaments to come. 💪 Keep practicing!');
+                            notificationServices.sendNotificationToSingleUser(widget.token, '🚫 Tournament Exit', 'Don\'t give up! There are more tournaments to come. 💪 Keep practicing!',{
+                              'type':'MyMatchesTeamScreen',
+                              'tournamentId':widget.tournamentId,
+                              'isHomeScreen':widget.isHomeScreen.toString(),
+                            });
 
                           },
                           editOnPressed: (context){
                             controller.confirmUpdate(context: context, teamId: teams[index].id, message: 'Qualify',teamStatus: 'win');
-                            notificationServices.sendNotificationToSingleUser(widget.token, '🎉 You Qualified!', 'Amazing progress! Keep going strong and make it all the way! 🎯');
+                            notificationServices.sendNotificationToSingleUser(widget.token, '🎉 You Qualified!', 'Amazing progress! Keep going strong and make it all the way! 🎯',
+                                {
+                                  'type':'MyMatchesTeamScreen',
+                                  'tournamentId':widget.tournamentId,
+                                  'isHomeScreen':widget.isHomeScreen.toString(),
+                                });
                           },
                           editOnPressedTeamScreen: (context){
                             controller.confirmUpdate(context: context, teamId: teams[index].id, message: 'Disqualify',teamStatus: 'lose');
-                            notificationServices.sendNotificationToSingleUser(widget.token, '😞 Tough Luck!', 'Every setback is a setup for a comeback! 🌟 Keep pushing forward!');
+                            notificationServices.sendNotificationToSingleUser(widget.token, '😞 Tough Luck!', 'Every setback is a setup for a comeback! 🌟 Keep pushing forward!',
+                                {
+                                  'type':'MyMatchesTeamScreen',
+                                  'tournamentId':widget.tournamentId,
+                                  'isHomeScreen':widget.isHomeScreen.toString(),
+                                });
                           },
                           child: Container(
                             margin:const EdgeInsets.symmetric(vertical: 5),
@@ -225,6 +249,7 @@ class _ViewMyTournamentsTeamsState extends State<ViewMyTournamentsTeams> {
                               color: isSelected ? tCardBgColor.withOpacity(0.3) : transparentColor,
                             ),
                             child: TeamCard(
+                              vs: team.vs,
                               roundsQualify: team.roundsQualify,
                               imagePath: team.imageLink,
                               userId: widget.userId,

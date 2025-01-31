@@ -19,6 +19,7 @@ class TeamCard extends StatelessWidget {
   final String imagePath;
   final String roundsQualify;
   final VoidCallback? onMessage;
+  final bool vs;
   const TeamCard(
       {required this.teamName,
       required this.leaderName,
@@ -30,7 +31,8 @@ class TeamCard extends StatelessWidget {
       required this.teamId,
       required this.imagePath,
       required this.roundsQualify,
-      this.onMessage});
+      this.onMessage,
+      required this.vs});
   @override
   Widget build(BuildContext context) {
     String toTitleCase(String text) {
@@ -177,8 +179,9 @@ class TeamCard extends StatelessWidget {
                     Icon(Icons.circle,size: 5,color:  teamResult == 'none'? whiteColor : teamResult == 'win'? greenColor : redColor,),
                     Sized(width: 0.02,),
                     teamResult == 'none' && roundsQualify=='none'
-                        ? smallText(
-                            title: 'Enqueue', context: context, color: whiteColor,fontSize: 10,fontWeight: FontWeight.w500)
+                        ? vs == true ? smallText(
+                            title: 'Match Scheduled', context: context, color: whiteColor,fontSize: 10,fontWeight: FontWeight.w500) : smallText(
+                        title: 'Enqueue', context: context, color: whiteColor,fontSize: 10,fontWeight: FontWeight.w500)
                         : teamResult == 'win' && roundsQualify !='none'
                             ? smallText(
                                 title: roundsQualify,

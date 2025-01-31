@@ -12,15 +12,32 @@ import 'package:tournemnt/reusbale_widget/custom_sizedBox.dart';
 import 'package:tournemnt/reusbale_widget/text_widgets.dart';
 import 'package:tournemnt/tournaments_detail_screen/tournamnet_detail_screen.dart';
 import '../chat_screens/messages.dart';
+import '../controllers/token_update_controller.dart';
 import '../models_classes.dart';
 import '../reusbale_widget/custom_floating_action.dart';
 import '../reusbale_widget/tournment-card.dart';
 import 'add_tournments.dart';
 
 
-class TournamentListPage extends StatelessWidget {
+class TournamentListPage extends StatefulWidget {
   final String userId ;
   const TournamentListPage({super.key, required this.userId});
+
+  @override
+  State<TournamentListPage> createState() => _TournamentListPageState();
+}
+
+class _TournamentListPageState extends State<TournamentListPage> {
+  var controller = Get.put(TokenUpdateController());
+
+  @override
+  void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
+    super.initState();
+    controller.updateTokenForUserTournaments();
+    controller.updateTokenForUserTournamentTeam();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BgWidget(
@@ -93,12 +110,12 @@ class TournamentListPage extends StatelessWidget {
                       Get.to(()=> TournamentDetailScreen(data: data,));
                     },
                     onMessage: (){
-                      Get.to(()=> MessageScreen(receiverId: tournaments[index].organizerId,receiverName: tournaments[index].organizerName,receiverToken: tournaments[index].token,userId:userId,));
+                      Get.to(()=> MessageScreen(receiverId: tournaments[index].organizerId,receiverName: tournaments[index].organizerName,receiverToken: tournaments[index].token,userId:widget.userId,));
                     },
                     imagePath: tournaments[index].imagePath ,
                     totalTeams:tournaments[index].totalTeam,
                     registerTeams: tournaments[index].registerTeams,
-                    userId: userId,
+                    userId: widget.userId,
                     organizerId:tournaments[index].organizerId,
                     tournamentName: tournaments[index].name,
                     organizerName: tournaments[index].organizerName,
@@ -108,7 +125,7 @@ class TournamentListPage extends StatelessWidget {
                     isCompleted: tournaments[index].isCompleted,
                     startDate:formattedDate,
                     onTap: (){
-                      Get.to(()=> TeamListPage(tournamentId: tournaments[index].id,userId: userId,isHomeScreen: true,isCompleted: tournaments[index].isCompleted,registerTeams:tournaments[index].registerTeams,totalTeam: tournaments[index].totalTeam,token: tournaments[index].token,),);
+                      Get.to(()=> TeamListPage(tournamentId: tournaments[index].id,userId: widget.userId,isHomeScreen: true,isCompleted: tournaments[index].isCompleted,registerTeams:tournaments[index].registerTeams,totalTeam: tournaments[index].totalTeam,token: tournaments[index].token,),);
                     },
                   );
                 },
@@ -120,7 +137,7 @@ class TournamentListPage extends StatelessWidget {
           Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => AddTournamentPage(userId: userId,),
+              builder: (context) => AddTournamentPage(userId: widget.userId,),
             ),
           );
         },),

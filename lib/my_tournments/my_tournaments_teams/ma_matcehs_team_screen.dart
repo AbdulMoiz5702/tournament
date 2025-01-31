@@ -112,6 +112,7 @@ class _MyMatchesTeamScreenState extends State<MyMatchesTeamScreen> {
                     child: Container(
                       margin: EdgeInsets.all(5),
                       child: TeamCard(
+                        vs: teams[index].vs,
                         roundsQualify: teams[index].roundsQualify,
                         imagePath:teams[index].imageLink,
                         userId: widget.userId,
@@ -127,6 +128,7 @@ class _MyMatchesTeamScreenState extends State<MyMatchesTeamScreen> {
                   ) : Container(
                     margin: EdgeInsets.all(5),
                     child: TeamCard(
+                      vs: teams[index].vs,
                       roundsQualify: teams[index].roundsQualify,
                       imagePath:teams[index].imageLink,
                       userId: widget.userId,

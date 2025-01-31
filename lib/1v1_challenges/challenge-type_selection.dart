@@ -13,11 +13,11 @@ import '../reusbale_widget/text_widgets.dart';
 
 
 class ChallengeTypeSelection extends StatelessWidget {
-  const ChallengeTypeSelection({super.key});
+  final dynamic controller;
+  const ChallengeTypeSelection({required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(AddChallengesController());
     return BgWidget(
         child: Scaffold(
           appBar: AppBar(

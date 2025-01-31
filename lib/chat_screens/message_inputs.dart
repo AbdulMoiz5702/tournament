@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tournemnt/consts/firebase_consts.dart';
 import '../consts/colors.dart';
 import '../consts/images_path.dart';
 import '../controllers/chat_controller.dart';
@@ -67,7 +68,15 @@ Widget buildMessageInput(
                           ? notificationServices.sendNotificationToSingleUser(
                               receiverToken,
                               'New Message! 💬',
-                              'You have a new message from $userName')
+                              'You have a new message from $userName',
+                        {
+                          'type': 'message',  // Add your type here
+                          'receiverId': userId,
+                          'receiverName': userName,
+                          'receiverToken': userToken,
+                          'senderId':receiverId,
+                        },
+                      )
                           : null;
                     },
                     child: Container(
@@ -114,7 +123,13 @@ Widget buildMessageInput(
                               ? notificationServices.sendNotificationToSingleUser(
                                   receiverToken,
                                   'New Message! 💬',
-                                  'You have a new message from $userName')
+                                  'You have a new message from $userName',{
+                            'type': 'message',  // Add your type here
+                            'receiverId': userId,
+                            'receiverName': userName,
+                            'receiverToken': userToken,
+                            'senderId':receiverId,
+                          },)
                               : null;
                         },
                         itemBuilder: (BuildContext context) => [
@@ -177,7 +192,13 @@ Widget buildMessageInput(
                     ? notificationServices.sendNotificationToSingleUser(
                         receiverToken,
                         'New Message! 💬',
-                        'You have a new message from $userName')
+                        'You have a new message from $userName',{
+                  'type': 'message',  // Add your type here
+                  'receiverId': userId,
+                  'receiverName': userName,
+                  'receiverToken': userToken,
+                  'senderId':receiverId,
+                },)
                     : null;
               }
             },
@@ -304,8 +325,14 @@ Widget buildFirstMessageMessageInput(
                 notificationServices.sendNotificationToSingleUser(
                     receiverToken,
                     'New Message! 💬',
-                    'You have a new message from $userName. Start the conversation!'
-                );
+                    'You have a new message from $userName. Start the conversation!',
+                  {
+                  'type': 'message',  // Add your type here
+                  'receiverId': userId,
+                  'receiverName': userName,
+                  'receiverToken': userToken,
+                  'senderId':receiverId,
+                  },);
               },
               child: Container(
                 height: 32,
@@ -341,7 +368,14 @@ Widget buildFirstMessageMessageInput(
                 notificationServices.sendNotificationToSingleUser(
                     receiverToken,
                     'New Message! 💬',
-                    'You have a new message from $userName'
+                    'You have a new message from $userName',
+                  {
+                    'type': 'message',  // Add your type here
+                    'receiverId': userId,
+                    'receiverName': userName,
+                    'receiverToken': userToken,
+                    'senderId':receiverId,
+                  },
                 );
               }
             },

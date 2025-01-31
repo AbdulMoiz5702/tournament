@@ -24,15 +24,18 @@ class BottomScreen extends StatefulWidget {
 class _BottomScreenState extends State<BottomScreen> with WidgetsBindingObserver {
 
   late List<Widget> screens;
-
   var controller = Get.put(TokenUpdateController());
   var statusController = Get.put(SetStatusController());
   int  indexCurrent = 0;
+
+
+
 
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
     super.initState();
+    controller.userProfileToken();
     WidgetsBinding.instance.addObserver(this);
     screens = [
       TournamentListPage(userId: widget.userId),
@@ -65,12 +68,13 @@ class _BottomScreenState extends State<BottomScreen> with WidgetsBindingObserver
     final shouldPop = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Exit App'),
-        content: Text('Are you sure you want to exit?'),
+        backgroundColor: whiteColor,
+        title: mediumText(title: 'Exit App',color: blackColor),
+        content: smallText(title: 'Are you sure you want to exit?',color: blackColor,fontWeight: FontWeight.w500),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text('No'),
+            child: smallText(title: 'No',color: blackColor,fontWeight: FontWeight.w500),
           ),
           TextButton(
             onPressed: () {
@@ -78,7 +82,7 @@ class _BottomScreenState extends State<BottomScreen> with WidgetsBindingObserver
               statusController.setStatus(isOnline: false);
               statusController.isOnline.value = false;
             },
-            child: Text('Yes'),
+            child: smallText(title: 'Yes',color: blackColor,fontWeight: FontWeight.w500),
           ),
         ],
       ),

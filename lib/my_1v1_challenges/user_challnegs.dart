@@ -106,7 +106,7 @@ class UserAcceptedChallengesScreen extends StatelessWidget {
                             challengerLeaderPhone:
                             challengeData['challengerLeaderPhone'],
                             location: challengeData['location'],
-                            matchOvers: challengeData['Overs'],
+                            matchOvers: challengeData['Over'],
                             teamCount: challengeData['teamCount'],
                             userId: userId,
                             challengerId: challengeData['challenger'],
@@ -173,10 +173,9 @@ class UserAcceptedChallengesScreen extends StatelessWidget {
                       imagePath: challengeData['imagePath'],
                       challengerTeamName: challengeData['challengerTeamName'],
                       teamLeaderName: challengeData['teamLeaderName'],
-                      challengerLeaderPhone:
-                      challengeData['challengerLeaderPhone'],
+                      challengerLeaderPhone: challengeData['challengerLeaderPhone'],
                       location: challengeData['location'],
-                      matchOvers: challengeData['Overs'],
+                      matchOvers: challengeData['Over'],
                       teamCount: challengeData['teamCount'],
                       userId: userId,
                       challengerId: challengeData['challenger'],
